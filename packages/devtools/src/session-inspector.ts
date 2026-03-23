@@ -26,7 +26,7 @@ export class SessionInspector {
 
     // Track channel additions via session events
     session.on('channel:added', (e) => {
-      const ch = (e as { channel: import('@muix/core').Channel<unknown, unknown> }).channel;
+      const ch = (e as unknown as { channel: import('@muix/core').Channel<unknown, unknown> }).channel;
       if (!this._tracers.has(ch.id)) {
         this._tracers.set(ch.id, new ChannelTracer(ch));
       }

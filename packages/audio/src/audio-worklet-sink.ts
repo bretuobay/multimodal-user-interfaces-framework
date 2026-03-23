@@ -56,7 +56,7 @@ export class AudioWorkletSink {
       frame.buffer.length,
       frame.sampleRate,
     );
-    buffer.copyToChannel(frame.buffer, 0);
+    buffer.copyToChannel(frame.buffer as Float32Array<ArrayBuffer>, 0);
 
     const source = this._context.createBufferSource();
     source.buffer = buffer;

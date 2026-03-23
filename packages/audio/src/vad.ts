@@ -16,7 +16,8 @@ export interface AudioFrameWithVad {
 export function computeRms(buffer: Float32Array): number {
   let sum = 0;
   for (let i = 0; i < buffer.length; i++) {
-    sum += buffer[i] * buffer[i];
+    const s = buffer[i] ?? 0;
+    sum += s * s;
   }
   return Math.sqrt(sum / buffer.length);
 }

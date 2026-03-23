@@ -65,7 +65,7 @@ export function createGestureRecognizer(
 
           // Pinch detection: two active pointers
           if (pointers.size === 2) {
-            const [a, b] = [...pointers.values()];
+            const [a, b] = [...pointers.values()] as [PointerTrack, PointerTrack];
             const currentDist = Math.hypot(a.lastX - b.lastX, a.lastY - b.lastY);
             const startDist = Math.hypot(a.startX - b.startX, a.startY - b.startY);
             if (startDist > 0) {
