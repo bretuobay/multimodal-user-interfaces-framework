@@ -1,102 +1,97 @@
-import Image, { type ImageProps } from "next/image";
-import { Button } from "@repo/ui/button";
-import styles from "./page.module.css";
-
-type Props = Omit<ImageProps, "src"> & {
-  srcLight: string;
-  srcDark: string;
-};
-
-const ThemeImage = (props: Props) => {
-  const { srcLight, srcDark, ...rest } = props;
-
-  return (
-    <>
-      <Image {...rest} src={srcLight} className="imgLight" />
-      <Image {...rest} src={srcDark} className="imgDark" />
-    </>
-  );
-};
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <ThemeImage
-          className={styles.logo}
-          srcLight="turborepo-dark.svg"
-          srcDark="turborepo-light.svg"
-          alt="Turborepo logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>apps/docs/app/page.tsx</code>
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main style={{ maxWidth: 760, margin: "0 auto", padding: "5rem 2rem" }}>
+      <div style={{ marginBottom: "0.75rem" }}>
+        <span className="badge">v0.1.0 — Phase 3</span>
+      </div>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new/clone?demo-description=Learn+to+implement+a+monorepo+with+a+two+Next.js+sites+that+has+installed+three+local+packages.&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4K8ZISWAzJ8X1504ca0zmC%2F0b21a1c6246add355e55816278ef54bc%2FBasic.png&demo-title=Monorepo+with+Turborepo&demo-url=https%3A%2F%2Fexamples-basic-web.vercel.sh%2F&from=templates&project-name=Monorepo+with+Turborepo&repository-name=monorepo-turborepo&repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fturborepo%2Ftree%2Fmain%2Fexamples%2Fbasic&root-directory=apps%2Fdocs&skippable-integrations=1&teamSlug=vercel&utm_source=create-turbo"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://turborepo.dev/docs?utm_source"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-        <Button appName="docs" className={styles.secondary}>
-          Open alert
-        </Button>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com/templates?search=turborepo&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      <h1 style={{ fontSize: "2.75rem", marginBottom: "1.25rem", letterSpacing: "-0.02em" }}>
+        Multimodal UI<br />Experience Framework
+      </h1>
+
+      <p style={{ fontSize: "1.2rem", color: "var(--muted)", marginBottom: "2.5rem", lineHeight: 1.7 }}>
+        A browser-native, streaming-first, framework-agnostic toolkit for building
+        multimodal web UIs — text, audio, video, motion, and agent/LLM — with
+        adapters for React, Vue, Solid, and Web Components.
+      </p>
+
+      <div style={{ display: "flex", gap: "1rem", marginBottom: "4rem", flexWrap: "wrap" }}>
+        <Link
+          href="/docs/getting-started"
+          style={{
+            background: "var(--accent)",
+            color: "#fff",
+            padding: "0.65rem 1.5rem",
+            borderRadius: 6,
+            fontWeight: 600,
+            fontSize: "0.95rem",
+          }}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://turborepo.dev?utm_source=create-turbo"
-          target="_blank"
-          rel="noopener noreferrer"
+          Get started →
+        </Link>
+        <Link
+          href="/docs/core"
+          style={{
+            background: "var(--code-bg)",
+            color: "var(--fg)",
+            padding: "0.65rem 1.5rem",
+            borderRadius: 6,
+            fontWeight: 600,
+            fontSize: "0.95rem",
+            border: "1px solid var(--border)",
+          }}
         >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to turborepo.dev →
-        </a>
-      </footer>
-    </div>
+          API reference
+        </Link>
+      </div>
+
+      <hr />
+
+      <h2 style={{ borderBottom: "none", marginTop: "2.5rem" }}>Packages</h2>
+
+      <table style={{ marginTop: "1rem" }}>
+        <thead>
+          <tr>
+            <th>Package</th>
+            <th>What it provides</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ["@muix/core", "Signal, Observable, Channel, Session, Action, EventBus"],
+            ["@muix/capability", "CapabilityRegistry, browser probes (media, speech, WebRTC, WebXR)"],
+            ["@muix/policy", "PolicyEngine, PermissionPolicy, ConcurrencyPolicy, RateLimitPolicy"],
+            ["@muix/text", "TextChannel, streaming token accumulator"],
+            ["@muix/agent", "AgentChannel, SSE/NDJSON parser, ToolRegistry"],
+            ["@muix/audio", "AudioChannel, MicrophoneSource, AudioWorkletSink, VAD"],
+            ["@muix/video", "VideoChannel, CameraSource, CanvasSink"],
+            ["@muix/motion", "MotionChannel, PointerSource, DeviceOrientationSource, GestureRecognizer"],
+            ["@muix/react", "SessionProvider, useSignal, useChannel, useAction, useAgent"],
+            ["@muix/vue", "provideSession, useSignal, useChannel, useAction, useAgent"],
+            ["@muix/solid", "createSessionProvider, useSignal, useChannel, useAction, useAgent"],
+            ["@muix/wc", "<muix-session>, <muix-channel> custom elements"],
+            ["@muix/devtools", "SessionInspector, ChannelTracer, <muix-devtools> panel"],
+          ].map(([pkg, desc]) => (
+            <tr key={pkg}>
+              <td><code>{pkg}</code></td>
+              <td style={{ color: "var(--muted)", fontSize: "0.875rem" }}>{desc}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <hr />
+
+      <h2 style={{ borderBottom: "none", marginTop: "2rem" }}>Design principles</h2>
+      <ul style={{ marginTop: "1rem", lineHeight: 2 }}>
+        <li><strong>Browser-native</strong> — WHATWG Streams, Web Audio API, Pointer Events; no polyfills required.</li>
+        <li><strong>Streaming-first</strong> — every modality is a <code>Channel</code> with backpressure and <code>pause()</code>/<code>resume()</code>.</li>
+        <li><strong>Framework-agnostic</strong> — <code>@muix/core</code> has zero framework deps; adapters are thin layers.</li>
+        <li><strong>Pure ESM</strong> — <code>&quot;type&quot;: &quot;module&quot;</code>, <code>&quot;sideEffects&quot;: false</code> on every package; tree-shakeable.</li>
+        <li><strong>TC39-aligned</strong> — Signal naming matches the TC39 proposal; Observable has <code>[Symbol.observable]()</code> for RxJS interop.</li>
+      </ul>
+    </main>
   );
 }
