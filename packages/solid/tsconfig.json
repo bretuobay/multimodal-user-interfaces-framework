@@ -1,0 +1,6 @@
+{
+  "extends": "@repo/typescript-config/library.json",
+  "compilerOptions": { "rootDir": "src", "outDir": "dist", "jsx": "preserve", "jsxImportSource": "solid-js" },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "src/**/*.test.ts", "src/test"]
+}

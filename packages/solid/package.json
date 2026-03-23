@@ -1,0 +1,42 @@
+{
+  "name": "@muix/solid",
+  "version": "0.1.0",
+  "type": "module",
+  "sideEffects": false,
+  "description": "Solid.js primitives for the MUIX framework",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@muix/agent": "*",
+    "@muix/core": "*"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.0.0"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*",
+    "jsdom": "^26.1.0",
+    "solid-js": "^1.9.11",
+    "typescript": "5.9.2",
+    "vite": "^6.3.0",
+    "vite-plugin-dts": "^4.5.3",
+    "vitest": "^3.2.0"
+  }
+}

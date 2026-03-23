@@ -15,3 +15,4 @@ export {
 export { microphoneCapability, cameraCapability, screenCaptureCapability } from './probes/media-devices.js';
 export { speechSynthesisCapability, speechRecognitionCapability } from './probes/speech.js';
 export { webRTCCapability } from './probes/webrtc.js';
+export { immersiveVrCapability, immersiveArCapability, inlineXrCapability } from './probes/webxr.js';
