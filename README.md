@@ -1,159 +1,152 @@
-# Turborepo starter
+# MUIX — Multimodal UI Experience Framework
 
-This Turborepo starter is maintained by the Turborepo core team.
+[![CI](https://github.com/bretuobay/multimodal-user-interfaces-framework/actions/workflows/ci.yml/badge.svg)](https://github.com/bretuobay/multimodal-user-interfaces-framework/actions/workflows/ci.yml)
 
-## Using this example
+A browser-native, streaming-first, framework-agnostic toolkit for building multimodal web UIs — text, audio, video, motion, and agent/LLM — with adapters for React, Vue, Solid, and Web Components.
 
-Run the following command:
+## Packages
 
-```sh
-npx create-turbo@latest
+| Package | Version | Description |
+|---|---|---|
+| [`@muix/core`](./packages/core) | 0.1.0 | Signal, Observable, Channel, Session, Action, EventBus |
+| [`@muix/capability`](./packages/capability) | 0.1.0 | CapabilityRegistry, browser probes (media, speech, WebRTC, WebXR) |
+| [`@muix/policy`](./packages/policy) | 0.1.0 | PolicyEngine, PermissionPolicy, ConcurrencyPolicy, RateLimitPolicy |
+| [`@muix/text`](./packages/text) | 0.1.0 | TextChannel, streaming token accumulator |
+| [`@muix/agent`](./packages/agent) | 0.1.0 | AgentChannel, SSE/NDJSON parser, ToolRegistry |
+| [`@muix/audio`](./packages/audio) | 0.1.0 | AudioChannel, MicrophoneSource, AudioWorkletSink, VAD |
+| [`@muix/video`](./packages/video) | 0.1.0 | VideoChannel, CameraSource, CanvasSink |
+| [`@muix/motion`](./packages/motion) | 0.1.0 | MotionChannel, PointerSource, DeviceOrientationSource, GestureRecognizer |
+| [`@muix/react`](./packages/react) | 0.1.0 | SessionProvider, useSignal, useChannel, useAction, useAgent |
+| [`@muix/vue`](./packages/vue) | 0.1.0 | provideSession, useSignal, useChannel, useAction, useAgent |
+| [`@muix/solid`](./packages/solid) | 0.1.0 | createSessionProvider, useSignal, useChannel, useAction, useAgent |
+| [`@muix/wc`](./packages/wc) | 0.1.0 | `<muix-session>`, `<muix-channel>` custom elements |
+| [`@muix/devtools`](./packages/devtools) | 0.1.0 | SessionInspector, ChannelTracer, `<muix-devtools>` panel |
+
+## Quick start
+
+```bash
+npm install @muix/core @muix/agent @muix/react
 ```
 
-## What's inside?
+```tsx
+// Streaming LLM chat in ~20 lines
+import { createAgentChannel } from "@muix/agent";
+import { SessionProvider, useSession, useAgent } from "@muix/react";
 
-This Turborepo includes the following packages/apps:
+const channel = createAgentChannel({ endpoint: "/api/chat" });
 
-### Apps and Packages
+function Chat() {
+  const session = useSession();
+  const { send, history, streamingText, isStreaming } = useAgent({ channel, session });
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+  return (
+    <>
+      {history.map((m, i) => <div key={i}><b>{m.role}:</b> {m.content}</div>)}
+      {isStreaming && <div><b>assistant:</b> {streamingText}▌</div>}
+      <button onClick={() => send({ role: "user", content: "Hello" })}>Send</button>
+    </>
+  );
+}
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo build
+export default function App() {
+  return <SessionProvider><Chat /></SessionProvider>;
+}
 ```
 
-Without global `turbo`, use your package manager:
+See the [full docs](./apps/docs) or the [live streaming chat demo](./apps/web/app/chat).
 
-```sh
-cd my-turborepo
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+## Architecture
+
+All modalities follow the same pattern: a `Channel` carries typed frames between a **source** (device API) and a **sink** (renderer / consumer). A `Session` owns the lifecycle; `Signal` drives reactive state; `Action` handles cancellable async work.
+
+```
+core
+ ├── capability   (browser feature detection)
+ │    └── policy  (permission / concurrency / rate-limit rules)
+ │         ├── text    (streaming text tokens)
+ │         └── agent   (LLM streaming over SSE/NDJSON)
+ ├── audio        (microphone → AudioWorklet)
+ ├── video        (camera → canvas)
+ └── motion       (pointer / orientation / gestures)
+      └── react / vue / solid / wc   (framework adapters)
+           └── devtools              (inspector panel)
 ```
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+**Key decisions:**
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
+- **WHATWG Streams** as the Channel substrate — native backpressure, no polyfills.
+- **Own Observable** (~200 lines, TC39-compatible) — no RxJS dependency, `[Symbol.observable]()` for interop.
+- **Own Signal** (~150 lines) — TC39 Signals proposal naming; migration-compatible.
+- **Pure ESM** — `"type": "module"`, `"sideEffects": false` on every package.
+- **AudioWorkletNode** (not the deprecated `ScriptProcessorNode`) for microphone capture.
 
-```sh
-turbo build --filter=docs
+## Development
+
+**Requirements:** Node ≥ 18, npm ≥ 10
+
+```bash
+# Install
+npm install
+
+# Build all @muix/* packages
+npm run build -- --filter=@muix/*
+
+# Run all tests
+npm test -- --filter=@muix/*
+
+# Type check
+npm run check-types -- --filter=@muix/*
+
+# Start the demo app (port 3000) + docs (port 3001)
+npm run dev
 ```
 
-Without global `turbo`:
+### Running a single package
 
-```sh
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+```bash
+# Tests
+npx turbo run test --filter=@muix/core
+
+# Watch mode
+npx turbo run test:watch --filter=@muix/agent
 ```
 
-### Develop
+### Test counts (Phase 3)
 
-To develop all apps and packages, run the following command:
+| Package | Tests |
+|---|---|
+| @muix/core | 48 |
+| @muix/capability | 24 |
+| @muix/policy | 23 |
+| @muix/text | 5 |
+| @muix/agent | 14 |
+| @muix/react | 6 |
+| @muix/audio | 10 |
+| @muix/video | 5 |
+| @muix/motion | 8 |
+| @muix/vue | 3 |
+| @muix/solid | 3 |
+| @muix/wc | 5 |
+| @muix/devtools | 7 |
+| **Total** | **161** |
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
+## Apps
 
-```sh
-cd my-turborepo
-turbo dev
-```
+| App | Port | Description |
+|---|---|---|
+| `apps/web` | 3000 | Streaming chat demo using `@muix/react` + `@muix/agent` |
+| `apps/docs` | 3001 | API reference site (14 pages, fully static) |
 
-Without global `turbo`, use your package manager:
+## CI
 
-```sh
-cd my-turborepo
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
+Every push to `main` and every PR runs:
 
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+1. `npm run build -- --filter=@muix/*` — all 13 packages
+2. `npm test -- --filter=@muix/*` — all 161 tests
+3. `npm run check-types -- --filter=@muix/*` — zero TypeScript errors
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
+Matrix: Node 20 and Node 22.
 
-```sh
-turbo dev --filter=web
-```
+## License
 
-Without global `turbo`:
-
-```sh
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+MIT
