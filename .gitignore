@@ -27,6 +27,11 @@ out/
 build
 dist
 
+# Generated declaration files — should only appear in dist/, never in src/
+packages/*/src/**/*.d.ts
+packages/*/src/**/*.d.ts.map
+packages/*/src/**/*.js.map
+
 
 # Debug
 npm-debug.log*
