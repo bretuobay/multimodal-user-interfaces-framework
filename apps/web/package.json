@@ -11,6 +11,9 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@muix/agent": "*",
+    "@muix/core": "*",
+    "@muix/react": "*",
     "@repo/ui": "*",
     "next": "16.2.0",
     "react": "^19.2.0",

@@ -1,0 +1,46 @@
+{
+  "name": "@muix/react",
+  "version": "0.1.0",
+  "type": "module",
+  "sideEffects": false,
+  "description": "React adapter for the MUIX multimodal UI framework",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@muix/core": "*",
+    "@muix/agent": "*"
+  },
+  "peerDependencies": {
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "5.9.2",
+    "vite": "^6.3.0",
+    "vite-plugin-dts": "^4.5.3",
+    "vitest": "^3.2.0",
+    "jsdom": "^26.1.0"
+  }
+}

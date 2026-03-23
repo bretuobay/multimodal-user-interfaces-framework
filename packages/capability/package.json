@@ -1,0 +1,36 @@
+{
+  "name": "@muix/capability",
+  "version": "0.1.0",
+  "type": "module",
+  "sideEffects": false,
+  "description": "Capability detection and negotiation for the MUIX framework",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@muix/core": "*"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*",
+    "typescript": "5.9.2",
+    "vite": "^6.3.0",
+    "vite-plugin-dts": "^4.5.3",
+    "vitest": "^3.2.0",
+    "@vitest/coverage-v8": "^3.2.0",
+    "jsdom": "^26.1.0"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "@muix/core",
+  "version": "0.1.0",
+  "type": "module",
+  "sideEffects": false,
+  "description": "Core runtime primitives for the MUIX multimodal UI framework",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./observable": {
+      "import": "./dist/observable.js",
+      "types": "./dist/observable.d.ts"
+    },
+    "./signal": {
+      "import": "./dist/signal.js",
+      "types": "./dist/signal.d.ts"
+    },
+    "./channel": {
+      "import": "./dist/channel.js",
+      "types": "./dist/channel.d.ts"
+    },
+    "./session": {
+      "import": "./dist/session.js",
+      "types": "./dist/session.d.ts"
+    },
+    "./action": {
+      "import": "./dist/action.js",
+      "types": "./dist/action.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "typescript": "5.9.2",
+    "vite": "^6.3.0",
+    "vite-plugin-dts": "^4.5.3",
+    "vitest": "^3.2.0",
+    "@vitest/coverage-v8": "^3.2.0",
+    "jsdom": "^26.1.0"
+  }
+}
