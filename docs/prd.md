@@ -317,17 +317,17 @@ useAgent({ channel: AgentChannel }): {
 }
 ```
 
-### 5.2 Vue — `@muix/vue` *(Phase 2)*
+### 5.2 Vue — `@muix/vue`
 
-Composables mirroring the React hook surface: `useSignal`, `useChannel`, `useSession`, `useAgent`.
+Composables mirroring the React adapter shape: `provideSession`, `useSession`, `useSignal`, `useChannel`, `useAction`, `useAgent`.
 
-### 5.3 Web Components — `@muix/wc` *(Phase 2)*
+### 5.3 Web Components — `@muix/wc`
 
-Custom elements: `<muix-session>`, `<muix-channel>`. Attribute/property bindings backed by Signals.
+Custom elements: `<muix-session>`, `<muix-channel>`.
 
-### 5.4 Solid.js — `@muix/solid` *(Phase 3)*
+### 5.4 Solid.js — `@muix/solid`
 
-Bridge between MUIX Signals and Solid's reactive primitives via `createSignal`/`createEffect`.
+Solid adapter surface: `createSessionProvider`, `useSession`, `useSignal`, `useChannel`, `useAction`, `useAgent`.
 
 ---
 
@@ -439,7 +439,7 @@ User message → AgentChannel.sendMessage()
 
 ### Phase 1 — Core + Text + Agent + React ✅
 
-**Exit criterion:** Working LLM streaming chat demo in `apps/web/app/chat`.
+**Exit criterion:** Working LLM streaming chat demo in `apps/web/app`.
 
 | Package | Status |
 |---|---|
@@ -449,35 +449,35 @@ User message → AgentChannel.sendMessage()
 | `@muix/text` | ✅ Complete — 5 tests |
 | `@muix/agent` | ✅ Complete — 14 tests |
 | `@muix/react` | ✅ Complete — 6 tests |
-| Demo (`apps/web/app/chat`) | ✅ Complete |
+| Demo (`apps/web/app`) | ✅ Complete |
 
 **Total: 95 tests, all passing.**
 
 ---
 
-### Phase 2 — Audio + Video + Motion + Vue + Web Components
+### Phase 2 — Audio + Video + Motion + Vue + Web Components ✅
 
-**Exit criterion:** Voice-to-text demo + camera with gesture overlay in `apps/web`.
+**Status:** Package implementations are present in the monorepo. End-to-end demo hardening is still in progress.
 
 | Package | Capability deps | Key classes |
 |---|---|---|
-| `@muix/audio` | `media:microphone`, `speech:synthesis` | `MicrophoneSource`, `AudioWorkletSink`, `VoiceActivityDetector` |
-| `@muix/video` | `media:camera`, `media:screen` | `CameraSource`, `CanvasSink`, `WebRTCSink` |
+| `@muix/audio` | `media:microphone`, `speech:synthesis` | `MicrophoneSource`, `AudioWorkletSink`, `createVad` |
+| `@muix/video` | `media:camera`, `media:screen` | `CameraSource`, `CanvasSink` |
 | `@muix/motion` | — (pointer events, device orientation) | `PointerSource`, `DeviceOrientationSource`, `GestureRecognizer` |
-| `@muix/vue` | — | Composables: `useSignal`, `useChannel`, `useSession`, `useAgent` |
+| `@muix/vue` | — | `provideSession`, `useSignal`, `useChannel`, `useAction`, `useAgent` |
 | `@muix/wc` | — | `<muix-session>`, `<muix-channel>` custom elements |
 
 ---
 
-### Phase 3 — WebXR + Solid + DevTools + Production Hardening
+### Phase 3 — WebXR + Solid + DevTools + Production Hardening 🚧
 
-**Exit criterion:** Stable 1.0 public API, production benchmarks pass.
+**Status:** WebXR probes, Solid adapter, DevTools package, and docs app are present. Public API freeze and production hardening remain open.
 
 | Package | Key deliverables |
 |---|---|
-| `@muix/capability` (extension) | WebXR probe, XRController/XRHand sources |
-| `@muix/solid` | Solid.js bridge — MUIX Signal ↔ Solid createSignal |
-| `@muix/devtools` | Session inspector overlay, channel frame rate tracer, policy audit log |
+| `@muix/capability` (extension) | WebXR probes shipped; XRController/XRHand sources remain future work |
+| `@muix/solid` | Solid.js adapter shipped |
+| `@muix/devtools` | Session inspector overlay and channel frame tracer shipped |
 | All packages | Public API freeze, full API docs in `apps/docs`, 60fps VideoChannel benchmark |
 
 ---

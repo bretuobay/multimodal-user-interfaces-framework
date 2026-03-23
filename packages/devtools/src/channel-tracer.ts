@@ -8,12 +8,14 @@ import type { ChannelSnapshot } from './types.js';
 
 export class ChannelTracer {
   readonly channelId: string;
+  private readonly _channel: Channel<unknown, unknown>;
   private _frameCount = 0;
   private _lastFrameAt: number | null = null;
   private _recentTimestamps: number[] = [];
   private _sub: { unsubscribe(): void } | null = null;
 
   constructor(channel: Channel<unknown, unknown>) {
+    this._channel = channel;
     this.channelId = channel.id;
 
     this._sub = channel.observe().subscribe({
@@ -29,9 +31,10 @@ export class ChannelTracer {
     });
   }
 
-  get snapshot(): Omit<ChannelSnapshot, 'status'> {
+  get snapshot(): ChannelSnapshot {
     return {
       id: this.channelId,
+      status: this._channel.status.peek(),
       frameCount: this._frameCount,
       lastFrameAt: this._lastFrameAt,
       fps: this._recentTimestamps.length, // count in the last 1s window = fps

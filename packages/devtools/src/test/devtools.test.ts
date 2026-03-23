@@ -81,6 +81,34 @@ describe('SessionInspector', () => {
     inspector.dispose();
   });
 
+  it('tracks channels that already exist when the inspector is created', async () => {
+    const channel = session.addChannel('existing-channel');
+    await channel.open();
+    await channel.send('frame');
+
+    const inspector = new SessionInspector(session);
+    const snap = inspector.snapshot();
+
+    expect(snap.channels.some((entry) => entry.id === 'existing-channel')).toBe(
+      true,
+    );
+    inspector.dispose();
+  });
+
+  it('tracks channels added after the inspector is created', async () => {
+    const inspector = new SessionInspector(session);
+    const channel = session.addChannel('late-channel');
+    await channel.open();
+    await channel.send('frame');
+
+    const snap = inspector.snapshot();
+    const traced = snap.channels.find((entry) => entry.id === 'late-channel');
+
+    expect(traced).toBeDefined();
+    expect(traced?.frameCount).toBe(1);
+    inspector.dispose();
+  });
+
   it('calls onChange handlers on interval', async () => {
     vi.useFakeTimers();
     const inspector = new SessionInspector(session, { updateIntervalMs: 100 });

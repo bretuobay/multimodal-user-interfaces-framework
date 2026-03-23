@@ -27,6 +27,43 @@ export interface ActionDefinition<T, P = ActionProgress<T>> {
   ): Promise<T> | AsyncGenerator<P, T>;
 }
 
+async function resolveExecutionResult<T>(
+  resultOrGen: Promise<T> | AsyncGenerator<ActionProgress<T>, T>,
+  signal: AbortSignal,
+  emit: (progress: ActionProgress<T>) => void,
+): Promise<T> {
+  if (
+    resultOrGen !== null &&
+    typeof resultOrGen === 'object' &&
+    Symbol.asyncIterator in resultOrGen
+  ) {
+    const iterator = resultOrGen as AsyncGenerator<ActionProgress<T>, T>;
+    try {
+      while (true) {
+        const step = await iterator.next();
+        if (step.done) {
+          return step.value;
+        }
+        if (signal.aborted) {
+          break;
+        }
+        emit(step.value);
+      }
+    } finally {
+      if (signal.aborted) {
+        const returnResult = iterator.return?.(undefined as T);
+        if (returnResult) {
+          await returnResult.catch(() => undefined);
+        }
+      }
+    }
+
+    throw new Error('Action cancelled');
+  }
+
+  return await resultOrGen;
+}
+
 export class Action<T> {
   readonly id: string;
   readonly type: string;
@@ -179,36 +216,15 @@ export async function runAction<T>(
 
   (async () => {
     try {
-      const resultOrGen = definition.execute(action.signal, (p) =>
-        action._emitProgress(p as ActionProgress<T>),
+      const result = await resolveExecutionResult(
+        definition.execute(action.signal, (p) =>
+          action._emitProgress(p as ActionProgress<T>),
+        ) as Promise<T> | AsyncGenerator<ActionProgress<T>, T>,
+        action.signal,
+        (progress) => action._emitProgress(progress),
       );
-
-      if (
-        resultOrGen !== null &&
-        typeof resultOrGen === 'object' &&
-        Symbol.asyncIterator in resultOrGen
-      ) {
-        // AsyncGenerator path — yield progress, return is final result
-        const gen = resultOrGen as AsyncGenerator<
-          ActionProgress<T>,
-          T
-        >;
-        let final: T | undefined;
-        for await (const progress of gen) {
-          if (action.signal.aborted) break;
-          action._emitProgress(progress);
-        }
-        // Get return value — cast needed because IteratorResult<ActionProgress<T>, T>
-        const returnResult = await gen.return(undefined as unknown as T);
-        final = returnResult.value as unknown as T;
-        if (!action.signal.aborted) {
-          action._setCompleted(final as T);
-        }
-      } else {
-        const result = await (resultOrGen as Promise<T>);
-        if (!action.signal.aborted) {
-          action._setCompleted(result);
-        }
+      if (!action.signal.aborted) {
+        action._setCompleted(result);
       }
     } catch (e: unknown) {
       if (action.signal.aborted) {

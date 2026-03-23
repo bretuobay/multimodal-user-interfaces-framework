@@ -115,4 +115,21 @@ describe('Action', () => {
     await new Promise((r) => setTimeout(r, 10));
     expect(action.status.value).toBe('cancelled');
   });
+
+  it('preserves async-generator return values', async () => {
+    const definition: ActionDefinition<string, { message: string }> = {
+      type: 'streaming-return',
+      async *execute() {
+        yield { message: 'step-1' };
+        yield { message: 'step-2' };
+        return 'final-result';
+      },
+    };
+
+    const action = await runAction(definition);
+    const result = await action.toPromise();
+
+    expect(result).toBe('final-result');
+    expect(action.result.value).toBe('final-result');
+  });
 });

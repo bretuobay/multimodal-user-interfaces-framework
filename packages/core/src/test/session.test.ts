@@ -128,4 +128,24 @@ describe('Session', () => {
     session.state.update((s) => ({ ...s, count: 2 }));
     expect(values[values.length - 1]).toEqual({ count: 2 });
   });
+
+  it('preserves async-generator return values for dispatched actions', async () => {
+    const session = createSession();
+    await session.start();
+
+    const def: ActionDefinition<string, { partial: string }> = {
+      type: 'streaming-session-action',
+      async *execute() {
+        yield { partial: 'hello' };
+        yield { partial: 'world' };
+        return 'done';
+      },
+    };
+
+    const action = session.dispatch(def);
+    const result = await action.toPromise();
+
+    expect(result).toBe('done');
+    expect(action.result.value).toBe('done');
+  });
 });

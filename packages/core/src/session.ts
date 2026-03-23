@@ -21,8 +21,8 @@ export type SessionStatus =
   | 'error';
 
 export interface SessionEventMap {
-  'channel:added': { channelId: string };
-  'channel:removed': { channelId: string };
+  'channel:added': { channelId: string; channel: Channel<unknown, unknown> };
+  'channel:removed': { channelId: string; channel?: Channel<unknown, unknown> };
   'action:dispatched': { actionId: string; type: string };
   'action:completed': { actionId: string; result: unknown };
   'action:failed': { actionId: string; error: unknown };
@@ -34,6 +34,43 @@ export interface SessionEventMap {
 export interface SessionOptions {
   id?: string;
   metadata?: Record<string, unknown>;
+}
+
+async function resolveExecutionResult<T>(
+  resultOrGen: Promise<T> | AsyncGenerator<unknown, T>,
+  signal: AbortSignal,
+  emit: (progress: { partial?: T }) => void,
+): Promise<T> {
+  if (
+    resultOrGen !== null &&
+    typeof resultOrGen === 'object' &&
+    Symbol.asyncIterator in resultOrGen
+  ) {
+    const iterator = resultOrGen as AsyncGenerator<{ partial?: T }, T>;
+    try {
+      while (true) {
+        const step = await iterator.next();
+        if (step.done) {
+          return step.value;
+        }
+        if (signal.aborted) {
+          break;
+        }
+        emit(step.value);
+      }
+    } finally {
+      if (signal.aborted) {
+        const returnResult = iterator.return?.(undefined as T);
+        if (returnResult) {
+          await returnResult.catch(() => undefined);
+        }
+      }
+    }
+
+    throw new Error('Action cancelled');
+  }
+
+  return await resultOrGen;
 }
 
 let _sessionCounter = 0;
@@ -130,7 +167,10 @@ export class Session {
     }
     const channel = new Channel<In, Out>({ ...options, id });
     this._channels.set(id, channel as Channel<unknown, unknown>);
-    this._bus.emit('channel:added', { channelId: id });
+    this._bus.emit('channel:added', {
+      channelId: id,
+      channel: channel as Channel<unknown, unknown>,
+    });
 
     if (this._status.value === 'active') {
       channel.open().catch((e: unknown) => {
@@ -150,7 +190,7 @@ export class Session {
     if (!channel) return;
     await channel.close();
     this._channels.delete(id);
-    this._bus.emit('channel:removed', { channelId: id });
+    this._bus.emit('channel:removed', { channelId: id, channel });
   }
 
   get channelIds(): string[] {
@@ -172,26 +212,13 @@ export class Session {
     action._setRunning();
     (async () => {
       try {
-        const resultOrGen = definition.execute(action.signal, (p) =>
-          action._emitProgress(p),
+        const result = await resolveExecutionResult(
+          definition.execute(action.signal, (p) => action._emitProgress(p)) as
+            | Promise<T>
+            | AsyncGenerator<unknown, T>,
+          action.signal,
+          (progress) => action._emitProgress(progress),
         );
-
-        let result: T;
-        if (
-          resultOrGen !== null &&
-          typeof resultOrGen === 'object' &&
-          Symbol.asyncIterator in resultOrGen
-        ) {
-          const gen = resultOrGen as AsyncGenerator<unknown, T>;
-          for await (const progress of gen) {
-            if (action.signal.aborted) break;
-            action._emitProgress(progress as { partial?: T });
-          }
-          const ret = await gen.return(undefined as unknown as T);
-          result = ret.value as unknown as T;
-        } else {
-          result = await (resultOrGen as Promise<T>);
-        }
 
         if (!action.signal.aborted) {
           action._setCompleted(result);

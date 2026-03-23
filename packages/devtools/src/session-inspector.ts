@@ -24,12 +24,24 @@ export class SessionInspector {
     this._session = session;
     this._intervalMs = options.updateIntervalMs ?? 500;
 
+    for (const channelId of session.channelIds) {
+      const channel = session.getChannel(channelId);
+      if (channel) {
+        this._tracers.set(channelId, new ChannelTracer(channel));
+      }
+    }
+
     // Track channel additions via session events
     session.on('channel:added', (e) => {
-      const ch = (e as unknown as { channel: import('@muix/core').Channel<unknown, unknown> }).channel;
-      if (!this._tracers.has(ch.id)) {
-        this._tracers.set(ch.id, new ChannelTracer(ch));
+      const channel = e.channel ?? session.getChannel(e.channelId);
+      if (channel && !this._tracers.has(channel.id)) {
+        this._tracers.set(channel.id, new ChannelTracer(channel));
       }
+    });
+    session.on('channel:removed', (e) => {
+      const tracer = this._tracers.get(e.channelId);
+      tracer?.dispose();
+      this._tracers.delete(e.channelId);
     });
   }
 
@@ -59,10 +71,9 @@ export class SessionInspector {
 
   /** Read current state synchronously */
   snapshot(): SessionSnapshot {
-    const channelSnapshots = Array.from(this._tracers.values()).map((tracer) => ({
-      ...tracer.snapshot,
-      status: 'open', // Channel status not tracked per-tracer to keep it lightweight
-    }));
+    const channelSnapshots = Array.from(this._tracers.values()).map((tracer) =>
+      tracer.snapshot,
+    );
 
     return {
       id: this._session.id,

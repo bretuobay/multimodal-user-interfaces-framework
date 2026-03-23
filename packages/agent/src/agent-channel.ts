@@ -106,6 +106,7 @@ export class AgentChannel extends Channel<AgentMessage, AgentStreamFrame> {
           if (abortController.signal.aborted) break;
 
           frames.push(frame);
+          action._emitProgress({ partial: [...frames] });
 
           // Send to channel's outbound stream
           if (this.status.value === 'open' || this.status.value === 'idle') {
@@ -152,6 +153,7 @@ export class AgentChannel extends Channel<AgentMessage, AgentStreamFrame> {
                 toolResult: { toolCallId, result: toolResult, isError },
               };
               frames.push(resultFrame);
+              action._emitProgress({ partial: [...frames] });
               await this.send_frame(resultFrame);
             }
           }

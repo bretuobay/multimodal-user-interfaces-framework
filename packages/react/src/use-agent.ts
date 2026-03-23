@@ -70,7 +70,7 @@ export function useAgent({ channel }: UseAgentOptions): UseAgentResult {
         },
       });
 
-      action.status.observe().subscribe({
+      const statusSub = action.status.observe().subscribe({
         next: (status) => {
           if (status === 'completed') {
             setIsStreaming(false);
@@ -82,13 +82,16 @@ export function useAgent({ channel }: UseAgentOptions): UseAgentResult {
               ]);
             }
             sub.unsubscribe();
+            statusSub.unsubscribe();
           } else if (status === 'failed') {
             setIsStreaming(false);
             setError(action.error.value);
             sub.unsubscribe();
+            statusSub.unsubscribe();
           } else if (status === 'cancelled') {
             setIsStreaming(false);
             sub.unsubscribe();
+            statusSub.unsubscribe();
           }
         },
       });
