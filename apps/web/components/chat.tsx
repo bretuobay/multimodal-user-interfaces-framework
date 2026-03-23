@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { createAgentChannel } from '@muix/agent';
-import { createSession } from '@muix/core';
 import { SessionProvider, useSession, useAgent } from '@muix/react';
 
 // Create a single channel instance outside the component (per-app lifetime)
@@ -69,7 +68,7 @@ function ChatInterface() {
           </div>
         )}
 
-        {error && (
+        {error != null && (
           <div style={styles.error}>
             Error: {String(error)}
           </div>

@@ -16,6 +16,11 @@ import type { Session } from '@muix/core';
 import { SessionInspector } from './session-inspector.js';
 import type { DevtoolsOptions, SessionSnapshot } from './types.js';
 
+const BaseHTMLElement: typeof HTMLElement =
+  typeof HTMLElement === 'undefined'
+    ? class {} as typeof HTMLElement
+    : HTMLElement;
+
 const PANEL_STYLES = `
   :host {
     all: initial;
@@ -92,7 +97,7 @@ function renderSnapshot(snap: SessionSnapshot): string {
   `;
 }
 
-export class MuixDevtoolsElement extends HTMLElement {
+export class MuixDevtoolsElement extends BaseHTMLElement {
   private _inspector: SessionInspector | null = null;
   private _unsubscribe: (() => void) | null = null;
   private _collapsed = false;
@@ -160,4 +165,9 @@ export class MuixDevtoolsElement extends HTMLElement {
   }
 }
 
-customElements.define('muix-devtools', MuixDevtoolsElement);
+if (
+  typeof customElements !== 'undefined' &&
+  !customElements.get('muix-devtools')
+) {
+  customElements.define('muix-devtools', MuixDevtoolsElement);
+}

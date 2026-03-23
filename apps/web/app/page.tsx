@@ -1,10 +1,13 @@
-import { Chat } from '../components/chat';
+import { ShowcaseLab } from '../components/showcase-lab';
 
 export const metadata = {
-  title: 'MUIX Chat Demo',
-  description: 'LLM streaming chat powered by @muix/agent + @muix/react',
+  title: 'MUIX Showcase Lab',
+  description:
+    'A flagship multimodal demo for MUIX featuring streaming agent interactions, motion gestures, capabilities, and live runtime inspection.',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
-  return <Chat />;
+  return <ShowcaseLab />;
 }

@@ -196,25 +196,23 @@ export class Channel<In, Out = In> {
    */
   pipe<NewOut>(transform: TransformStream<Out, NewOut>): Channel<In, NewOut> {
     const downstream = new Channel<In, NewOut>();
-    const sourceReader = this.source.readable.getReader();
     const transformWriter = transform.writable.getWriter();
     const transformReader = transform.readable.getReader();
-
-    void (async () => {
-      try {
-        while (true) {
-          const { done, value } = await sourceReader.read();
-          if (done) break;
-          await transformWriter.write(value.data);
-        }
-        await transformWriter.close();
-      } catch (error) {
-        await transformWriter.abort(error).catch(() => {});
-        await downstream.close(String(error)).catch(() => {});
-      } finally {
-        sourceReader.releaseLock();
-      }
-    })();
+    const sourceSubscription = this.observe().subscribe({
+      next: (frame) => {
+        void transformWriter.write(frame.data).catch(async (error) => {
+          await transformWriter.abort(error).catch(() => {});
+          await downstream.close(String(error)).catch(() => {});
+        });
+      },
+      error: (error) => {
+        void transformWriter.abort(error).catch(() => {});
+        void downstream.close(String(error)).catch(() => {});
+      },
+      complete: () => {
+        void transformWriter.close().catch(() => {});
+      },
+    });
 
     void (async () => {
       try {
@@ -227,6 +225,7 @@ export class Channel<In, Out = In> {
       } catch (error) {
         await downstream.close(String(error)).catch(() => {});
       } finally {
+        sourceSubscription.unsubscribe();
         transformReader.releaseLock();
       }
     })();

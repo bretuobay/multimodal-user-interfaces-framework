@@ -1,0 +1,708 @@
+.page {
+  min-height: 100vh;
+  padding: 32px 22px 48px;
+}
+
+.shell {
+  max-width: 1380px;
+  margin: 0 auto;
+  display: grid;
+  gap: 22px;
+  animation: shimmer-rise 500ms ease-out;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(320px, 0.9fr);
+  gap: 24px;
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: 34px;
+  background:
+    radial-gradient(circle at top left, rgba(191, 77, 40, 0.18), transparent 36%),
+    radial-gradient(circle at 88% 24%, rgba(11, 110, 79, 0.18), transparent 30%),
+    linear-gradient(145deg, rgba(255, 250, 243, 0.94), rgba(247, 236, 220, 0.92));
+  box-shadow: var(--shadow);
+}
+
+.heroEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 13px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.68);
+  color: var(--accent-strong);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.liveDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--signal);
+  animation: pulse-dot 1.2s ease-in-out infinite;
+}
+
+.heroTitle {
+  margin-top: 18px;
+  font-size: clamp(2.8rem, 5vw, 5.2rem);
+  line-height: 0.94;
+  letter-spacing: -0.06em;
+  max-width: 10ch;
+}
+
+.heroText {
+  margin-top: 18px;
+  max-width: 58ch;
+  color: var(--ink-muted);
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.heroButton,
+.heroButtonSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.heroButton {
+  background: linear-gradient(135deg, var(--accent), #da6c39);
+  color: #fff9f4;
+  font-weight: 700;
+}
+
+.heroButtonSecondary {
+  background: rgba(255, 255, 255, 0.66);
+  border-color: var(--line);
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.heroButton:hover,
+.heroButtonSecondary:hover,
+.chipButton:hover,
+.scenarioCard:hover,
+.controlButton:hover,
+.depthButton:hover,
+.devtoolsButton:hover {
+  transform: translateY(-1px);
+}
+
+.heroMetrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-self: end;
+}
+
+.metricCard,
+.card {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow);
+}
+
+.metricCard {
+  padding: 18px;
+  border-radius: var(--radius-lg);
+}
+
+.metricLabel {
+  display: block;
+  color: var(--ink-muted);
+  font-size: 0.74rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.metricValue {
+  margin-top: 10px;
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+.metricHint {
+  margin-top: 8px;
+  color: var(--ink-muted);
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(340px, 0.95fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.stack {
+  display: grid;
+  gap: 22px;
+}
+
+.card {
+  border-radius: var(--radius-xl);
+  padding: 22px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.cardTitle {
+  font-size: 1.2rem;
+  letter-spacing: -0.03em;
+}
+
+.cardCopy {
+  margin-top: 6px;
+  color: var(--ink-muted);
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.statusPill,
+.tonePill,
+.chip,
+.capabilityTag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.statusPill,
+.tonePill {
+  min-height: 34px;
+  padding: 0 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.statusIdle {
+  background: rgba(106, 91, 77, 0.11);
+  color: var(--ink-muted);
+}
+
+.statusStreaming {
+  background: rgba(11, 110, 79, 0.14);
+  color: var(--signal);
+}
+
+.statusCancelled,
+.statusError {
+  background: rgba(172, 44, 38, 0.12);
+  color: var(--danger);
+}
+
+.statusComplete {
+  background: rgba(191, 77, 40, 0.12);
+  color: var(--accent);
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.chipButton,
+.chip {
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.56);
+  color: var(--ink);
+  font-size: 0.83rem;
+}
+
+.chipButton {
+  font-weight: 650;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.chipButtonActive {
+  border-color: rgba(191, 77, 40, 0.48);
+  background: rgba(191, 77, 40, 0.12);
+  color: var(--accent-strong);
+}
+
+.scenarioGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.scenarioCard {
+  text-align: left;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.56);
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.scenarioCardActive {
+  border-color: rgba(191, 77, 40, 0.45);
+  background: rgba(191, 77, 40, 0.09);
+}
+
+.scenarioTitle {
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.scenarioSummary {
+  margin-top: 8px;
+  color: var(--ink-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.composer {
+  display: grid;
+  gap: 12px;
+}
+
+.composerRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.input {
+  flex: 1;
+  min-width: 220px;
+  min-height: 54px;
+  padding: 0 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--panel-strong);
+  color: var(--ink);
+  outline: none;
+}
+
+.input:focus,
+.scenarioCard:focus-visible,
+.heroButton:focus-visible,
+.heroButtonSecondary:focus-visible,
+.chipButton:focus-visible,
+.controlButton:focus-visible,
+.depthButton:focus-visible,
+.devtoolsButton:focus-visible,
+.motionSurface:focus-visible {
+  outline: 2px solid rgba(191, 77, 40, 0.45);
+  outline-offset: 2px;
+}
+
+.controlButton,
+.depthButton,
+.devtoolsButton {
+  min-height: 52px;
+  padding: 0 16px;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, var(--accent), #d56332);
+  color: #fff9f4;
+  font-weight: 700;
+}
+
+.secondaryButton {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: var(--line);
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.dangerButton {
+  background: rgba(172, 44, 38, 0.12);
+  border-color: rgba(172, 44, 38, 0.2);
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.conversation {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.message,
+.streamCard {
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+}
+
+.messageUser {
+  background: linear-gradient(140deg, #d96234, #be4a28);
+  color: #fff7f2;
+}
+
+.messageAssistant,
+.streamCard {
+  background: rgba(255, 255, 255, 0.66);
+}
+
+.messageMeta {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.74;
+}
+
+.messageBody {
+  line-height: 1.7;
+}
+
+.streamCard {
+  border-style: dashed;
+}
+
+.cursor {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.runtimeGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.runtimeMetric {
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.runtimeMetricLabel {
+  color: var(--ink-muted);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+.runtimeMetricValue {
+  margin-top: 8px;
+  font-size: 1.5rem;
+  font-weight: 780;
+  letter-spacing: -0.04em;
+}
+
+.channelList,
+.logList,
+.frameList,
+.capabilityList,
+.gestureLegend {
+  display: grid;
+  gap: 10px;
+}
+
+.channelRow,
+.logRow,
+.frameRow,
+.capabilityRow,
+.gestureLegendRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.channelMeta,
+.capabilityMeta {
+  display: grid;
+  gap: 4px;
+}
+
+.channelName,
+.capabilityLabel,
+.gestureLegendTitle {
+  font-weight: 720;
+}
+
+.channelHint,
+.capabilityHint,
+.logDetail,
+.gestureLegendCopy {
+  color: var(--ink-muted);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.motionSurface {
+  position: relative;
+  min-height: 280px;
+  border-radius: 28px;
+  border: 1px solid rgba(191, 77, 40, 0.18);
+  background:
+    radial-gradient(circle at 24% 24%, rgba(191, 77, 40, 0.22), transparent 20%),
+    radial-gradient(circle at 78% 28%, rgba(11, 110, 79, 0.18), transparent 18%),
+    linear-gradient(145deg, rgba(255, 252, 247, 0.96), rgba(246, 235, 220, 0.86));
+  overflow: hidden;
+  touch-action: none;
+}
+
+.motionCopy {
+  position: absolute;
+  inset: 18px auto auto 18px;
+  max-width: 280px;
+  z-index: 1;
+}
+
+.motionTitle {
+  font-size: 1.4rem;
+  letter-spacing: -0.04em;
+}
+
+.motionHint {
+  margin-top: 10px;
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+.motionStats {
+  position: absolute;
+  inset: auto 18px 18px auto;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  max-width: 80%;
+  justify-content: flex-end;
+}
+
+.motionStat {
+  min-width: 110px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid var(--line);
+}
+
+.motionStatLabel {
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.motionStatValue {
+  margin-top: 6px;
+  font-weight: 760;
+}
+
+.pointerOrb {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  margin-left: -12px;
+  margin-top: -12px;
+  border-radius: 999px;
+  border: 2px solid rgba(191, 77, 40, 0.6);
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 16px rgba(191, 77, 40, 0.08);
+  pointer-events: none;
+}
+
+.surfaceBadge {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid var(--line);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.depthControl {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.depthLabel {
+  color: var(--ink-muted);
+  font-size: 0.84rem;
+}
+
+.depthButton {
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.depthButtonActive {
+  background: rgba(191, 77, 40, 0.12);
+  border-color: rgba(191, 77, 40, 0.4);
+  color: var(--accent-strong);
+}
+
+.capabilityTag {
+  min-height: 28px;
+  padding: 0 10px;
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tagAvailable {
+  background: rgba(11, 110, 79, 0.14);
+  color: var(--signal);
+}
+
+.tagUnavailable {
+  background: rgba(172, 44, 38, 0.12);
+  color: var(--danger);
+}
+
+.tagDegraded,
+.tagUnknown {
+  background: rgba(181, 106, 11, 0.14);
+  color: var(--warn);
+}
+
+.usedBadge {
+  color: var(--accent-strong);
+  background: rgba(191, 77, 40, 0.1);
+}
+
+.notUsedBadge {
+  color: var(--ink-muted);
+  background: rgba(106, 91, 77, 0.1);
+}
+
+.logRow {
+  align-items: flex-start;
+}
+
+.logToneAccent {
+  border-color: rgba(191, 77, 40, 0.22);
+}
+
+.logToneSuccess {
+  border-color: rgba(11, 110, 79, 0.22);
+}
+
+.logToneWarn {
+  border-color: rgba(181, 106, 11, 0.22);
+}
+
+.logTitle {
+  font-weight: 720;
+}
+
+.logTime {
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.frameRow {
+  font-family: var(--font-mono);
+  font-size: 0.83rem;
+}
+
+.frameType {
+  font-weight: 760;
+}
+
+.emptyState {
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px dashed var(--line-strong);
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+@media (max-width: 1120px) {
+  .hero,
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .scenarioGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding-inline: 14px;
+  }
+
+  .hero,
+  .card {
+    padding: 18px;
+  }
+
+  .heroMetrics {
+    grid-template-columns: 1fr;
+  }
+
+  .composerRow {
+    flex-direction: column;
+  }
+
+  .controlButton,
+  .devtoolsButton,
+  .input {
+    width: 100%;
+  }
+
+  .motionStats {
+    position: static;
+    padding: 18px;
+    justify-content: flex-start;
+  }
+}

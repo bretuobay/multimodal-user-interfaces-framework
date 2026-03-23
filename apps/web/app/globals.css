@@ -1,24 +1,44 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --bg: #f4efe4;
+  --bg-soft: #fff8ed;
+  --panel: rgba(255, 249, 240, 0.78);
+  --panel-strong: rgba(255, 253, 247, 0.96);
+  --line: rgba(76, 54, 31, 0.14);
+  --line-strong: rgba(76, 54, 31, 0.22);
+  --ink: #1f1a16;
+  --ink-muted: #6a5b4d;
+  --accent: #bf4d28;
+  --accent-strong: #8c3216;
+  --accent-soft: rgba(191, 77, 40, 0.12);
+  --signal: #0b6e4f;
+  --warn: #b56a0b;
+  --danger: #ac2c26;
+  --shadow: 0 24px 90px rgba(68, 44, 20, 0.14);
+  --radius-xl: 28px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --font-sans: var(--font-geist-sans), "Avenir Next", "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), "SFMono-Regular", monospace;
 }
 
 html,
 body {
   max-width: 100vw;
+  min-height: 100%;
   overflow-x: hidden;
 }
 
+html {
+  background:
+    radial-gradient(circle at top left, rgba(204, 117, 59, 0.22), transparent 32%),
+    radial-gradient(circle at 88% 16%, rgba(35, 132, 92, 0.18), transparent 26%),
+    linear-gradient(180deg, #f7f1e7 0%, #efe4d4 100%);
+}
+
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: var(--ink);
+  background: transparent;
+  font-family: var(--font-sans);
 }
 
 * {
@@ -27,24 +47,57 @@ body {
   margin: 0;
 }
 
+*::selection {
+  background: rgba(191, 77, 40, 0.18);
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
 a {
   color: inherit;
   text-decoration: none;
 }
 
-.imgDark {
-  display: none;
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.92);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+@keyframes shimmer-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
   }
 
-  .imgLight {
-    display: none;
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
-  .imgDark {
-    display: unset;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

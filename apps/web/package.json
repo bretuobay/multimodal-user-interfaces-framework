@@ -12,7 +12,10 @@
   },
   "dependencies": {
     "@muix/agent": "*",
+    "@muix/capability": "*",
     "@muix/core": "*",
+    "@muix/devtools": "*",
+    "@muix/motion": "*",
     "@muix/react": "*",
     "@repo/ui": "*",
     "next": "16.2.0",

@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+# `apps/web`
 
-## Getting Started
+The main MUIX example app.
 
-First, run the development server:
+This app is the flagship `Showcase Lab` for the framework. It is designed to
+demonstrate the runtime itself, not just a single chat flow:
+
+- streaming agent responses over `@muix/agent`
+- live session and channel state via `@muix/core`
+- motion and gesture input via `@muix/motion`
+- passive capability probing via `@muix/capability`
+- live inspection through `@muix/devtools`
+
+## Run locally
+
+From the repo root:
+
+```bash
+npm run dev -- --filter=web
+```
+
+Or from `apps/web`:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## What to try
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Click a starter scenario card to trigger a scripted streaming response.
+- Tap the motion surface to run the active scenario again.
+- Swipe on the motion surface to rotate the active story.
+- Cancel a long-form response mid-stream to see interruption behavior.
+- Watch the runtime snapshot and floating devtools panel update as frames move.
