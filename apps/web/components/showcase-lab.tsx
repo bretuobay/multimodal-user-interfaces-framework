@@ -40,6 +40,7 @@ import {
   type MotionEvent,
   type PointerEventData,
 } from '@muix/motion';
+import { StaticCodeBlock } from '@repo/ui';
 import { SessionProvider, useAgent, useSession, useSignal } from '@muix/react';
 import styles from './showcase-lab.module.css';
 
@@ -82,6 +83,13 @@ interface RuntimeChannels {
   agent: Channel<AgentStreamFrame, AgentStreamFrame>;
   motion: Channel<MotionEvent, MotionEvent>;
   gestures: Channel<MotionEvent, MotionEvent>;
+}
+
+interface CodeExample {
+  code: string;
+  html: string;
+  language: string;
+  title: string;
 }
 
 interface DevtoolsElement extends HTMLElement {
@@ -219,7 +227,7 @@ function heroMetricValue(snapshot: SessionSnapshot | null, fallback: string): st
   return String(snapshot.channels.length);
 }
 
-export function ShowcaseLab() {
+export function ShowcaseLab({ codeExample }: { codeExample: CodeExample }) {
   const session = useMemo(() => createSession({ id: 'showcase-lab' }), []);
   const agentChannel = useMemo(
     () => createAgentChannel({ endpoint: '/api/chat' }),
@@ -253,6 +261,7 @@ export function ShowcaseLab() {
     <SessionProvider session={session}>
       <ShowcaseWorkspace
         agentChannel={agentChannel}
+        codeExample={codeExample}
         motionChannel={motionChannel}
         gestureChannel={gestureChannel}
         runtimeChannels={runtimeChannelsRef.current}
@@ -263,11 +272,13 @@ export function ShowcaseLab() {
 
 function ShowcaseWorkspace({
   agentChannel,
+  codeExample,
   motionChannel,
   gestureChannel,
   runtimeChannels,
 }: {
   agentChannel: ReturnType<typeof createAgentChannel>;
+  codeExample: CodeExample;
   motionChannel: ReturnType<typeof createMotionChannel>;
   gestureChannel: Channel<MotionEvent, MotionEvent>;
   runtimeChannels: RuntimeChannels;
@@ -900,6 +911,26 @@ function ShowcaseWorkspace({
                   <span className={styles.chip}>pinches {motionStats.pinches}</span>
                 </div>
               </div>
+            </section>
+
+            <section className={styles.card}>
+              <div className={styles.cardHeader}>
+                <div>
+                  <h2 className={styles.cardTitle}>Runtime Slice</h2>
+                  <p className={styles.cardCopy}>
+                    One compact example from the setup behind this page. The
+                    same runtime pieces drive the live showcase and the docs.
+                  </p>
+                </div>
+                <span className={styles.chip}>Shared code surface</span>
+              </div>
+
+              <StaticCodeBlock
+                code={codeExample.code}
+                html={codeExample.html}
+                language={codeExample.language}
+                title={codeExample.title}
+              />
             </section>
           </div>
 

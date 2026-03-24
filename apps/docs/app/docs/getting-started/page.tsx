@@ -1,25 +1,30 @@
 import type { Metadata } from "next";
+import { CodeBlock } from "@repo/ui";
 
 export const metadata: Metadata = { title: "Getting Started" };
 
-export default function GettingStarted() {
+export default async function GettingStarted() {
   return (
     <>
       <h1>Getting Started</h1>
-      <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>
+      <p className="docs-lede">
         Build a streaming LLM chat in under 5 minutes.
       </p>
 
       <h2>Installation</h2>
       <p>Install the packages you need. Start with core + an adapter:</p>
-      <pre>{`# React
+      <CodeBlock
+        code={`# React
 npm install @muix/core @muix/agent @muix/react
 
 # Vue
 npm install @muix/core @muix/agent @muix/vue
 
 # Solid
-npm install @muix/core @muix/agent @muix/solid`}</pre>
+npm install @muix/core @muix/agent @muix/solid`}
+        language="bash"
+        title="install.sh"
+      />
 
       <p>
         All packages are pure ESM. Your bundler (Vite, Next.js, etc.) must
@@ -42,7 +47,8 @@ npm install @muix/core @muix/agent @muix/solid`}</pre>
       <h2>Quick start — streaming chat (React)</h2>
 
       <h3>1. Create an API endpoint</h3>
-      <pre>{`// app/api/chat/route.ts
+      <CodeBlock
+        code={`// app/api/chat/route.ts
 import { NextRequest } from "next/server";
 
 export const runtime = "edge";
@@ -68,10 +74,14 @@ export async function POST(req: NextRequest) {
   return new Response(stream, {
     headers: { "Content-Type": "text/event-stream" },
   });
-}`}</pre>
+}`}
+        language="ts"
+        title="app/api/chat/route.ts"
+      />
 
       <h3>2. Wire up the chat component</h3>
-      <pre>{`// components/Chat.tsx
+      <CodeBlock
+        code={`// components/Chat.tsx
 "use client";
 
 import { createAgentChannel } from "@muix/agent";
@@ -109,14 +119,21 @@ export default function Chat() {
       <ChatInterface />
     </SessionProvider>
   );
-}`}</pre>
+}`}
+        language="tsx"
+        title="components/Chat.tsx"
+      />
 
       <h3>3. Add the route</h3>
-      <pre>{`// app/chat/page.tsx
+      <CodeBlock
+        code={`// app/chat/page.tsx
 import Chat from "../../components/Chat";
 export default function ChatPage() {
   return <Chat />;
-}`}</pre>
+}`}
+        language="tsx"
+        title="app/chat/page.tsx"
+      />
 
       <h2>Next steps</h2>
       <ul>

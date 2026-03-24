@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { CodeBlock } from "@repo/ui";
 
 export const metadata: Metadata = { title: "@muix/policy" };
 
-export default function PolicyPage() {
+export default async function PolicyPage() {
   return (
     <>
       <h1>@muix/policy</h1>
-      <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>
+      <p className="docs-lede">
         Composable permission, concurrency, and rate-limiting rules.
       </p>
 
@@ -16,17 +17,22 @@ export default function PolicyPage() {
         <code>deny</code> wins; otherwise the first <code>throttle</code> wins;
         otherwise <code>allow</code>.
       </p>
-      <pre>{`import { createPolicyEngine } from "@muix/policy";
+      <CodeBlock
+        code={`import { createPolicyEngine } from "@muix/policy";
 
 const engine = createPolicyEngine();
 engine.add(rateLimitPolicy);
 engine.add(permissionPolicy);
 
 const result = await engine.evaluate({ action: "send-message", session });
-if (result.effect === "deny") throw new Error(result.reason);`}</pre>
+if (result.effect === "deny") throw new Error(result.reason);`}
+        language="ts"
+        title="policy-engine.ts"
+      />
 
       <h2>PermissionPolicy</h2>
-      <pre>{`import { PermissionPolicy } from "@muix/policy";
+      <CodeBlock
+        code={`import { PermissionPolicy } from "@muix/policy";
 
 const policy = new PermissionPolicy({
   id: "admin-only",
@@ -36,14 +42,18 @@ const policy = new PermissionPolicy({
       ? { effect: "allow" }
       : { effect: "deny", reason: "Admin access required" };
   },
-});`}</pre>
+});`}
+        language="ts"
+        title="permission-policy.ts"
+      />
 
       <h2>ConcurrencyPolicy</h2>
       <p>
         Limits the number of concurrently running actions. Calls beyond the
         limit are denied until a slot opens via <code>release()</code>.
       </p>
-      <pre>{`import { ConcurrencyPolicy } from "@muix/policy";
+      <CodeBlock
+        code={`import { ConcurrencyPolicy } from "@muix/policy";
 
 const policy = new ConcurrencyPolicy({ id: "max-3", maxConcurrent: 3, priority: 50 });
 
@@ -53,28 +63,39 @@ try {
   await doWork();
 } finally {
   policy.release(ticket);
-}`}</pre>
+}`}
+        language="ts"
+        title="concurrency-policy.ts"
+      />
 
       <h2>RateLimitPolicy</h2>
       <p>Sliding-window rate limiter.</p>
-      <pre>{`import { RateLimitPolicy } from "@muix/policy";
+      <CodeBlock
+        code={`import { RateLimitPolicy } from "@muix/policy";
 
 const policy = new RateLimitPolicy({
   id: "10-per-minute",
   maxRequests: 10,
   windowMs: 60_000,
   priority: 75,
-});`}</pre>
+});`}
+        language="ts"
+        title="rate-limit-policy.ts"
+      />
 
       <h2>ComposedPolicy</h2>
-      <pre>{`import { ComposedPolicy } from "@muix/policy";
+      <CodeBlock
+        code={`import { ComposedPolicy } from "@muix/policy";
 
 const policy = new ComposedPolicy({
   id: "compound",
   mode: "and",   // "and" = all must allow | "or" = any allow is enough
   policies: [rateLimitPolicy, permissionPolicy],
   priority: 10,
-});`}</pre>
+});`}
+        language="ts"
+        title="composed-policy.ts"
+      />
     </>
   );
 }

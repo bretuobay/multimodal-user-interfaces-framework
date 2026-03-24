@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import styles from "./layout.module.css";
 
 const NAV = [
   {
@@ -43,65 +44,27 @@ const NAV = [
   },
 ];
 
+const demoHref = process.env.NEXT_PUBLIC_WEB_DEMO_URL ?? "http://localhost:3000";
+
 export default function DocsLayout({ children }: { children: ReactNode }) {
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
-      {/* Sidebar */}
-      <nav
-        style={{
-          width: 240,
-          flexShrink: 0,
-          borderRight: "1px solid var(--border)",
-          background: "var(--sidebar-bg)",
-          padding: "1.5rem 0",
-          position: "sticky",
-          top: 0,
-          height: "100vh",
-          overflowY: "auto",
-        }}
-      >
-        <Link
-          href="/"
-          style={{
-            display: "block",
-            fontWeight: 700,
-            fontSize: "1rem",
-            padding: "0 1.25rem",
-            marginBottom: "1.5rem",
-            color: "var(--fg)",
-            letterSpacing: "-0.01em",
-          }}
-        >
-          ⬡ MUIX
+    <div className={styles.shell}>
+      <nav className={styles.sidebar}>
+        <Link className={styles.brand} href="/">
+          <span className={styles.brandMark}>
+            <span className={styles.brandDot} />
+            MUIX Docs
+          </span>
+          <span className={styles.brandCopy}>
+            Browser-native primitives for streaming multimodal interfaces.
+          </span>
         </Link>
 
         {NAV.map((section) => (
-          <div key={section.label} style={{ marginBottom: "1.25rem" }}>
-            <div
-              style={{
-                padding: "0 1.25rem",
-                marginBottom: "0.35rem",
-                fontSize: "0.7rem",
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "var(--muted)",
-              }}
-            >
-              {section.label}
-            </div>
+          <div className={styles.navGroup} key={section.label}>
+            <div className={styles.navLabel}>{section.label}</div>
             {section.items.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                style={{
-                  display: "block",
-                  padding: "0.3rem 1.25rem",
-                  fontSize: "0.875rem",
-                  color: "var(--fg)",
-                  borderRadius: 0,
-                }}
-              >
+              <Link className={styles.navLink} key={item.href} href={item.href}>
                 {item.label}
               </Link>
             ))}
@@ -109,17 +72,17 @@ export default function DocsLayout({ children }: { children: ReactNode }) {
         ))}
       </nav>
 
-      {/* Content */}
-      <main
-        style={{
-          flex: 1,
-          padding: "3rem 3.5rem",
-          maxWidth: 800,
-          minWidth: 0,
-        }}
-      >
-        {children}
-      </main>
+      <div className={styles.contentWrap}>
+        <div className={styles.topbar}>
+          <div className={styles.topbarKicker}>Reference and implementation guide</div>
+          <Link className={styles.topbarLink} href={demoHref}>
+            Launch demo
+          </Link>
+        </div>
+        <main className={styles.main}>
+          <article className={styles.article}>{children}</article>
+        </main>
+      </div>
     </div>
   );
 }

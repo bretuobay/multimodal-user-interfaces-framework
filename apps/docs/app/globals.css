@@ -1,43 +1,39 @@
 :root {
-  --bg: #ffffff;
-  --fg: #111111;
-  --muted: #666666;
-  --border: #e5e5e5;
-  --code-bg: #f5f5f5;
-  --accent: #4f6ef7;
-  --accent-light: #eef1ff;
-  --sidebar-bg: #fafafa;
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), "Courier New", monospace;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0d0d0d;
-    --fg: #ededed;
-    --muted: #888888;
-    --border: #222222;
-    --code-bg: #1a1a1a;
-    --accent: #7c9ef8;
-    --accent-light: #1a1f3a;
-    --sidebar-bg: #111111;
-  }
+  --bg: #0b1218;
+  --panel: #101920;
+  --fg: #edf6fb;
+  --muted: #94aab8;
+  --border: rgba(148, 170, 184, 0.16);
+  --border-strong: rgba(0, 191, 255, 0.28);
+  --code-bg: #0d161d;
+  --accent: #00bfff;
+  --accent-strong: #43d2ff;
+  --accent-soft: rgba(0, 191, 255, 0.14);
+  --sidebar-bg: #0f171d;
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+  --shadow-soft: 0 10px 24px rgba(0, 0, 0, 0.22);
+  --font-sans: var(--font-geist-sans), "Avenir Next", "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), "SFMono-Regular", monospace;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { font-size: 16px; }
+html {
+  font-size: 16px;
+  background: var(--bg);
+}
 
 body {
   font-family: var(--font-sans);
+  min-height: 100vh;
   background: var(--bg);
   color: var(--fg);
-  line-height: 1.6;
+  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
 }
 
 a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
+a:hover { text-decoration: underline; text-decoration-color: rgba(0, 191, 255, 0.45); }
 
 code, pre {
   font-family: var(--font-mono);
@@ -47,7 +43,7 @@ code, pre {
 pre {
   background: var(--code-bg);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 18px;
   padding: 1rem 1.25rem;
   overflow-x: auto;
   line-height: 1.5;
@@ -56,32 +52,40 @@ pre {
 :not(pre) > code {
   background: var(--code-bg);
   border: 1px solid var(--border);
-  border-radius: 3px;
-  padding: 0.1em 0.4em;
+  border-radius: 999px;
+  padding: 0.14em 0.52em;
 }
 
-h1, h2, h3, h4 { line-height: 1.25; font-weight: 600; }
-h1 { font-size: 2rem; }
-h2 { font-size: 1.4rem; margin-top: 2.5rem; margin-bottom: 0.75rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
-h3 { font-size: 1.1rem; margin-top: 1.75rem; margin-bottom: 0.5rem; }
+h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
+h1 { font-size: clamp(2.4rem, 5vw, 4rem); letter-spacing: -0.06em; }
+h2 { font-size: 1.45rem; margin-top: 2.6rem; margin-bottom: 0.85rem; padding-bottom: 0.55rem; border-bottom: 1px solid var(--border); letter-spacing: -0.04em; }
+h3 { font-size: 1.08rem; margin-top: 1.8rem; margin-bottom: 0.5rem; letter-spacing: -0.03em; }
 
 p { margin-bottom: 1rem; }
 ul, ol { margin-bottom: 1rem; padding-left: 1.5rem; }
 li { margin-bottom: 0.25rem; }
 
-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.9rem; }
-th { background: var(--code-bg); text-align: left; padding: 0.5rem 0.75rem; border: 1px solid var(--border); font-weight: 600; }
-td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); vertical-align: top; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.92rem; overflow: hidden; border-radius: 22px; }
+th { background: rgba(0, 191, 255, 0.08); text-align: left; padding: 0.8rem 0.9rem; border: 1px solid var(--border); font-weight: 700; }
+td { padding: 0.8rem 0.9rem; border: 1px solid var(--border); vertical-align: top; background: rgba(255, 255, 255, 0.02); }
 
 .badge {
   display: inline-block;
-  background: var(--accent-light);
-  color: var(--accent);
-  border-radius: 4px;
-  padding: 0.1em 0.5em;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  border: 1px solid rgba(0, 191, 255, 0.18);
+  border-radius: 999px;
+  padding: 0.2em 0.68em;
   font-size: 0.75rem;
   font-weight: 600;
   font-family: var(--font-mono);
 }
 
 hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+.docs-lede {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}

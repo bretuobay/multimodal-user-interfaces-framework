@@ -1,97 +1,182 @@
 import Link from "next/link";
+import { CodeBlock } from "@repo/ui";
+import styles from "./page.module.css";
 
-export default function Home() {
+const heroSnippet = `import { createAgentChannel } from "@muix/agent";
+import { SessionProvider, useAgent } from "@muix/react";
+
+const channel = createAgentChannel({ endpoint: "/api/chat" });
+
+function App() {
+  const { send, streamingText, isStreaming } = useAgent({ channel });
+
   return (
-    <main style={{ maxWidth: 760, margin: "0 auto", padding: "5rem 2rem" }}>
-      <div style={{ marginBottom: "0.75rem" }}>
-        <span className="badge">v0.1.0 — Phase 3</span>
-      </div>
+    <>
+      <button onClick={() => send({ role: "user", content: "Explain MUIX." })}>
+        Start stream
+      </button>
+      {isStreaming && <p>{streamingText}</p>}
+    </>
+  );
+}`;
 
-      <h1 style={{ fontSize: "2.75rem", marginBottom: "1.25rem", letterSpacing: "-0.02em" }}>
-        Multimodal UI<br />Experience Framework
-      </h1>
+const packages = [
+  ["@muix/core", "Signal, Observable, Channel, Session, Action, EventBus"],
+  ["@muix/capability", "CapabilityRegistry and browser probes for media, speech, WebRTC, and XR"],
+  ["@muix/policy", "PolicyEngine and runtime guardrails for multimodal systems"],
+  ["@muix/agent", "Streaming SSE/NDJSON LLM channel with tool-use support"],
+  ["@muix/audio", "Microphone, playback, and VAD primitives"],
+  ["@muix/video", "Camera and canvas frame pipelines"],
+  ["@muix/motion", "Pointer, orientation, and gesture channels"],
+  ["@muix/react", "React session provider and hooks"],
+  ["@muix/devtools", "Live session inspection and frame tracing"],
+];
 
-      <p style={{ fontSize: "1.2rem", color: "var(--muted)", marginBottom: "2.5rem", lineHeight: 1.7 }}>
-        A browser-native, streaming-first, framework-agnostic toolkit for building
-        multimodal web UIs — text, audio, video, motion, and agent/LLM — with
-        adapters for React, Vue, Solid, and Web Components.
-      </p>
+const demoHref = process.env.NEXT_PUBLIC_WEB_DEMO_URL ?? "http://localhost:3000";
 
-      <div style={{ display: "flex", gap: "1rem", marginBottom: "4rem", flexWrap: "wrap" }}>
-        <Link
-          href="/docs/getting-started"
-          style={{
-            background: "var(--accent)",
-            color: "#fff",
-            padding: "0.65rem 1.5rem",
-            borderRadius: 6,
-            fontWeight: 600,
-            fontSize: "0.95rem",
-          }}
-        >
-          Get started →
-        </Link>
-        <Link
-          href="/docs/core"
-          style={{
-            background: "var(--code-bg)",
-            color: "var(--fg)",
-            padding: "0.65rem 1.5rem",
-            borderRadius: 6,
-            fontWeight: 600,
-            fontSize: "0.95rem",
-            border: "1px solid var(--border)",
-          }}
-        >
-          API reference
-        </Link>
-      </div>
+export default async function Home() {
+  return (
+    <main className={styles.page}>
+      <section className={styles.hero}>
+        <div>
+          <span className={styles.eyebrow}>
+            <span className={styles.dot} />
+            Version 0.1.0
+          </span>
+          <h1 className={styles.title}>Multimodal UI Experience Framework</h1>
+          <p className={styles.lede}>
+            A browser-native, streaming-first toolkit for building text, audio,
+            video, motion, and agent interfaces without coupling your runtime
+            to one frontend stack.
+          </p>
+          <div className={styles.actions}>
+            <Link className={styles.primary} href="/docs/getting-started">
+              Read the guide
+            </Link>
+            <Link className={styles.secondary} href={demoHref}>
+              Open the demo
+            </Link>
+            <Link className={styles.secondary} href="/docs/core">
+              Browse APIs
+            </Link>
+          </div>
+        </div>
 
-      <hr />
+        <div className={styles.heroRail}>
+          <div className={styles.stats}>
+            <div className={styles.stat}>
+              <div className={styles.statLabel}>Packages</div>
+              <div className={styles.statValue}>13</div>
+              <div className={styles.statHint}>Core, modalities, adapters, tooling.</div>
+            </div>
+            <div className={styles.stat}>
+              <div className={styles.statLabel}>Runtime model</div>
+              <div className={styles.statValue}>Streaming</div>
+              <div className={styles.statHint}>Channels and sessions first.</div>
+            </div>
+            <div className={styles.stat}>
+              <div className={styles.statLabel}>Targets</div>
+              <div className={styles.statValue}>Web-native</div>
+              <div className={styles.statHint}>Built on browser primitives, not wrappers.</div>
+            </div>
+            <div className={styles.stat}>
+              <div className={styles.statLabel}>Adapters</div>
+              <div className={styles.statValue}>React+</div>
+              <div className={styles.statHint}>React, Vue, Solid, and Web Components.</div>
+            </div>
+          </div>
 
-      <h2 style={{ borderBottom: "none", marginTop: "2.5rem" }}>Packages</h2>
+          <div className={styles.railCard}>
+            <div className={styles.railTitle}>A better default for interface runtime code</div>
+            <p className={styles.railCopy}>
+              MUIX treats interruption, capability detection, and live runtime
+              visibility as first-class behavior, not UI afterthoughts.
+            </p>
+          </div>
+        </div>
+      </section>
 
-      <table style={{ marginTop: "1rem" }}>
-        <thead>
-          <tr>
-            <th>Package</th>
-            <th>What it provides</th>
-          </tr>
-        </thead>
-        <tbody>
-          {[
-            ["@muix/core", "Signal, Observable, Channel, Session, Action, EventBus"],
-            ["@muix/capability", "CapabilityRegistry, browser probes (media, speech, WebRTC, WebXR)"],
-            ["@muix/policy", "PolicyEngine, PermissionPolicy, ConcurrencyPolicy, RateLimitPolicy"],
-            ["@muix/text", "TextChannel, streaming token accumulator"],
-            ["@muix/agent", "AgentChannel, SSE/NDJSON parser, ToolRegistry"],
-            ["@muix/audio", "AudioChannel, MicrophoneSource, AudioWorkletSink, VAD"],
-            ["@muix/video", "VideoChannel, CameraSource, CanvasSink"],
-            ["@muix/motion", "MotionChannel, PointerSource, DeviceOrientationSource, GestureRecognizer"],
-            ["@muix/react", "SessionProvider, useSignal, useChannel, useAction, useAgent"],
-            ["@muix/vue", "provideSession, useSignal, useChannel, useAction, useAgent"],
-            ["@muix/solid", "createSessionProvider, useSignal, useChannel, useAction, useAgent"],
-            ["@muix/wc", "<muix-session>, <muix-channel> custom elements"],
-            ["@muix/devtools", "SessionInspector, ChannelTracer, <muix-devtools> panel"],
-          ].map(([pkg, desc]) => (
-            <tr key={pkg}>
-              <td><code>{pkg}</code></td>
-              <td style={{ color: "var(--muted)", fontSize: "0.875rem" }}>{desc}</td>
-            </tr>
+      <section className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <div>
+            <h2 className={styles.sectionTitle}>What it feels like to build with MUIX</h2>
+            <p className={styles.sectionCopy}>
+              The framework centers streaming channels, lightweight adapters,
+              and a runtime you can inspect while it is live.
+            </p>
+          </div>
+        </div>
+        <CodeBlock
+          code={heroSnippet}
+          language="tsx"
+          title="streaming-agent.tsx"
+        />
+      </section>
+
+      <section className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <div>
+            <h2 className={styles.sectionTitle}>Packages</h2>
+            <p className={styles.sectionCopy}>
+              Start with `@muix/core`, then compose the runtime surface you need.
+            </p>
+          </div>
+        </div>
+        <div className={styles.packageGrid}>
+          {packages.map(([pkg, desc]) => (
+            <div className={styles.packageCard} key={pkg}>
+              <code>{pkg}</code>
+              <p>{desc}</p>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      </section>
 
-      <hr />
+      <section className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <div>
+            <h2 className={styles.sectionTitle}>Design principles</h2>
+            <p className={styles.sectionCopy}>
+              The framework stays small by leaning on browser standards and thin adapters.
+            </p>
+          </div>
+        </div>
+        <div className={styles.principles}>
+          <div className={styles.principle}>
+            <h3>Browser-native</h3>
+            <p>Built on WHATWG Streams, Web Audio, Pointer Events, and platform APIs.</p>
+          </div>
+          <div className={styles.principle}>
+            <h3>Streaming-first</h3>
+            <p>Every modality maps to a channel with backpressure, pause, and resume semantics.</p>
+          </div>
+          <div className={styles.principle}>
+            <h3>Framework-agnostic</h3>
+            <p>`@muix/core` owns the runtime model; adapters stay deliberately thin.</p>
+          </div>
+          <div className={styles.principle}>
+            <h3>Inspectable runtime</h3>
+            <p>Sessions, channels, actions, and stream frames are visible while the app is running.</p>
+          </div>
+        </div>
+      </section>
 
-      <h2 style={{ borderBottom: "none", marginTop: "2rem" }}>Design principles</h2>
-      <ul style={{ marginTop: "1rem", lineHeight: 2 }}>
-        <li><strong>Browser-native</strong> — WHATWG Streams, Web Audio API, Pointer Events; no polyfills required.</li>
-        <li><strong>Streaming-first</strong> — every modality is a <code>Channel</code> with backpressure and <code>pause()</code>/<code>resume()</code>.</li>
-        <li><strong>Framework-agnostic</strong> — <code>@muix/core</code> has zero framework deps; adapters are thin layers.</li>
-        <li><strong>Pure ESM</strong> — <code>&quot;type&quot;: &quot;module&quot;</code>, <code>&quot;sideEffects&quot;: false</code> on every package; tree-shakeable.</li>
-        <li><strong>TC39-aligned</strong> — Signal naming matches the TC39 proposal; Observable has <code>[Symbol.observable]()</code> for RxJS interop.</li>
-      </ul>
+      <section className={styles.section}>
+        <div className={styles.links}>
+          <Link className={styles.linkTile} href="/docs/getting-started">
+            <h3>Quick start</h3>
+            <p>Build a streaming chat in minutes.</p>
+          </Link>
+          <Link className={styles.linkTile} href="/docs/core">
+            <h3>Core API</h3>
+            <p>Review the runtime primitives and contracts.</p>
+          </Link>
+          <Link className={styles.linkTile} href="/docs/devtools">
+            <h3>Devtools</h3>
+            <p>Inspect sessions and trace frames while the UI runs.</p>
+          </Link>
+        </div>
+      </section>
     </main>
   );
 }

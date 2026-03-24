@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { CodeBlock } from "@repo/ui";
 
 export const metadata: Metadata = { title: "@muix/core" };
 
-export default function CorePage() {
+export default async function CorePage() {
   return (
     <>
       <h1>@muix/core</h1>
-      <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>
+      <p className="docs-lede">
         The foundation — Signal, Observable, Channel, Session, Action, EventBus.
         Zero runtime dependencies.
       </p>
@@ -16,7 +17,8 @@ export default function CorePage() {
         A reactive value container. Naming is TC39 Signals proposal-compatible;
         the implementation is a lightweight own build (~150 lines).
       </p>
-      <pre>{`import { createSignal, createComputed } from "@muix/core";
+      <CodeBlock
+        code={`import { createSignal, createComputed } from "@muix/core";
 
 const count = createSignal(0);
 count.set(1);
@@ -29,7 +31,10 @@ const doubled = createComputed(
 );
 
 const sub = count.observe().subscribe({ next: (v) => console.log(v) });
-sub.unsubscribe();`}</pre>
+sub.unsubscribe();`}
+        language="ts"
+        title="signal.ts"
+      />
       <table>
         <thead><tr><th>Member</th><th>Description</th></tr></thead>
         <tbody>
@@ -46,7 +51,8 @@ sub.unsubscribe();`}</pre>
         TC39-compatible push stream (~200 lines). Implements{" "}
         <code>[Symbol.observable]()</code> for RxJS interop.
       </p>
-      <pre>{`import { Observable } from "@muix/core";
+      <CodeBlock
+        code={`import { Observable } from "@muix/core";
 
 const obs = new Observable<number>((observer) => {
   observer.next(1);
@@ -61,7 +67,10 @@ const sub = obs.subscribe({
   complete: () => console.log("done"),
 });
 
-sub.unsubscribe();`}</pre>
+sub.unsubscribe();`}
+        language="ts"
+        title="observable.ts"
+      />
 
       <h2>Channel</h2>
       <p>
@@ -69,7 +78,8 @@ sub.unsubscribe();`}</pre>
         <code>ReadableStream</code> / <code>WritableStream</code> (WHATWG Streams).
         Provides native backpressure, pause/resume, and composable piping.
       </p>
-      <pre>{`import { createChannel } from "@muix/core";
+      <CodeBlock
+        code={`import { createChannel } from "@muix/core";
 
 const ch = createChannel<string>({ highWaterMark: 16 });
 await ch.open();
@@ -87,7 +97,10 @@ const upper = ch.pipe(new TransformStream({
 
 ch.pause();   // backpressure
 ch.resume();
-await ch.close();`}</pre>
+await ch.close();`}
+        language="ts"
+        title="channel.ts"
+      />
       <table>
         <thead><tr><th>Member</th><th>Description</th></tr></thead>
         <tbody>
@@ -104,7 +117,8 @@ await ch.close();`}</pre>
       <p>
         A lifecycle container that owns channels and dispatches actions.
       </p>
-      <pre>{`import { createSession } from "@muix/core";
+      <CodeBlock
+        code={`import { createSession } from "@muix/core";
 
 const session = createSession({ id: "chat" });
 await session.start();
@@ -122,7 +136,10 @@ const action = session.dispatch({
 
 await session.suspend();
 await session.resume();
-await session.terminate();`}</pre>
+await session.terminate();`}
+        language="ts"
+        title="session.ts"
+      />
 
       <h2>Action</h2>
       <p>
@@ -130,7 +147,8 @@ await session.terminate();`}</pre>
         cancellation. Named <code>toPromise()</code> (not <code>.then()</code>)
         to avoid the JavaScript thenable trap.
       </p>
-      <pre>{`const action = session.dispatch({
+      <CodeBlock
+        code={`const action = session.dispatch({
   id: "my-action",
   execute: async function* (signal) {
     for (let i = 0; i < 10; i++) {
@@ -145,7 +163,10 @@ await session.terminate();`}</pre>
 action.status.observe().subscribe({ next: console.log });
 
 action.cancel("user cancelled");
-const result = await action.toPromise();`}</pre>
+const result = await action.toPromise();`}
+        language="ts"
+        title="action.ts"
+      />
     </>
   );
 }

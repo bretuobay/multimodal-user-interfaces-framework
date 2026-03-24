@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { CodeBlock } from "@repo/ui";
 
 export const metadata: Metadata = { title: "@muix/agent" };
 
-export default function AgentPage() {
+export default async function AgentPage() {
   return (
     <>
       <h1>@muix/agent</h1>
-      <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>
+      <p className="docs-lede">
         LLM streaming over SSE/NDJSON with tool-use support. OpenAI-compatible wire format.
       </p>
 
@@ -17,7 +18,8 @@ export default function AgentPage() {
         streaming conversation turn; the method returns an <code>Action</code>{" "}
         you can cancel mid-stream.
       </p>
-      <pre>{`import { createAgentChannel } from "@muix/agent";
+      <CodeBlock
+        code={`import { createAgentChannel } from "@muix/agent";
 
 const channel = createAgentChannel({
   endpoint: "/api/chat",   // your SSE endpoint
@@ -40,7 +42,10 @@ channel.observe().subscribe({
 });
 
 // Cancel mid-stream
-action.cancel();`}</pre>
+action.cancel();`}
+        language="ts"
+        title="agent-channel.ts"
+      />
 
       <h2>AgentStreamFrame</h2>
       <table>
@@ -55,7 +60,8 @@ action.cancel();`}</pre>
       </table>
 
       <h2>Tool registration</h2>
-      <pre>{`import { createAgentChannel } from "@muix/agent";
+      <CodeBlock
+        code={`import { createAgentChannel } from "@muix/agent";
 
 const channel = createAgentChannel({ endpoint: "/api/chat" });
 
@@ -75,18 +81,25 @@ channel.registerTool({
   },
 });
 
-// AgentChannel handles the tool_calls → execute → tool_result round-trip automatically`}</pre>
+// AgentChannel handles the tool_calls → execute → tool_result round-trip automatically`}
+        language="ts"
+        title="tool-registration.ts"
+      />
 
       <h2>SSE endpoint contract</h2>
       <p>
         Your endpoint must return <code>Content-Type: text/event-stream</code> with
         OpenAI-compatible delta frames:
       </p>
-      <pre>{`data: {"choices":[{"delta":{"content":"Hello"}}]}
+      <CodeBlock
+        code={`data: {"choices":[{"delta":{"content":"Hello"}}]}
 
 data: {"choices":[{"delta":{"content":" world"}}]}
 
-data: [DONE]`}</pre>
+data: [DONE]`}
+        language="text"
+        title="sse-stream.txt"
+      />
 
       <p>NDJSON is also supported — one JSON object per line, no <code>data:</code> prefix.</p>
     </>

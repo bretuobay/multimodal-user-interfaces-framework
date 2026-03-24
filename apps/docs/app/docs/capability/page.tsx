@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { CodeBlock } from "@repo/ui";
 
 export const metadata: Metadata = { title: "@muix/capability" };
 
-export default function CapabilityPage() {
+export default async function CapabilityPage() {
   return (
     <>
       <h1>@muix/capability</h1>
-      <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>
+      <p className="docs-lede">
         Browser feature detection with graceful degradation and fallback chains.
       </p>
 
@@ -18,7 +19,8 @@ export default function CapabilityPage() {
       </ul>
 
       <h2>CapabilityRegistry</h2>
-      <pre>{`import { createCapabilityRegistry, microphoneCapability } from "@muix/capability";
+      <CodeBlock
+        code={`import { createCapabilityRegistry, microphoneCapability } from "@muix/capability";
 
 const registry = createCapabilityRegistry();
 registry.register(microphoneCapability);
@@ -28,7 +30,10 @@ const status = await registry.probe("media:microphone");
 
 const { descriptor, status: s } = await registry.negotiate("media:microphone");
 const stream = await descriptor.acquire();   // MediaStream
-await descriptor.release(stream);`}</pre>
+await descriptor.release(stream);`}
+        language="ts"
+        title="capability-registry.ts"
+      />
 
       <h2>Built-in probes</h2>
       <table>
@@ -47,7 +52,8 @@ await descriptor.release(stream);`}</pre>
       </table>
 
       <h2>Custom capability</h2>
-      <pre>{`import type { CapabilityDescriptor } from "@muix/capability";
+      <CodeBlock
+        code={`import type { CapabilityDescriptor } from "@muix/capability";
 
 const bluetoothCapability: CapabilityDescriptor<BluetoothDevice> = {
   id: "bluetooth",
@@ -60,7 +66,10 @@ const bluetoothCapability: CapabilityDescriptor<BluetoothDevice> = {
   fallbacks: [],
 };
 
-registry.register(bluetoothCapability);`}</pre>
+registry.register(bluetoothCapability);`}
+        language="ts"
+        title="custom-capability.ts"
+      />
     </>
   );
 }

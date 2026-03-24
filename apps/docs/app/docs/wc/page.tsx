@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { CodeBlock } from "@repo/ui";
 
 export const metadata: Metadata = { title: "@muix/wc" };
 
-export default function WcPage() {
+export default async function WcPage() {
   return (
     <>
       <h1>@muix/wc</h1>
-      <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>
+      <p className="docs-lede">
         Custom elements for framework-free MUIX integration.
       </p>
 
@@ -15,7 +16,11 @@ export default function WcPage() {
         Importing the package registers both elements via{" "}
         <code>customElements.define()</code>.
       </p>
-      <pre>{`import "@muix/wc";   // side-effect: registers <muix-session> and <muix-channel>`}</pre>
+      <CodeBlock
+        code={`import "@muix/wc";   // side-effect: registers <muix-session> and <muix-channel>`}
+        language="ts"
+        title="registration.ts"
+      />
 
       <h2>&lt;muix-session&gt;</h2>
       <p>
@@ -23,14 +28,18 @@ export default function WcPage() {
         terminates on disconnect. Dispatches a <code>muix:session</code> custom
         event so children can receive the session instance.
       </p>
-      <pre>{`<muix-session id="my-session" session-id="chat-session">
+      <CodeBlock
+        code={`<muix-session id="my-session" session-id="chat-session">
   <muix-channel type="text" channel-id="messages"></muix-channel>
 </muix-session>
 
 <script>
   const sessionEl = document.querySelector("muix-session");
   sessionEl.session;   // Session instance (after connectedCallback)
-</script>`}</pre>
+</script>`}
+        language="html"
+        title="muix-session.html"
+      />
 
       <h2>&lt;muix-channel&gt;</h2>
       <p>
@@ -38,7 +47,8 @@ export default function WcPage() {
         <code>&lt;muix-session&gt;</code> ancestor. Dispatches{" "}
         <code>muix:channel</code> (bubbles) when the channel is ready.
       </p>
-      <pre>{`<muix-channel type="audio" channel-id="mic-input"></muix-channel>
+      <CodeBlock
+        code={`<muix-channel type="audio" channel-id="mic-input"></muix-channel>
 
 <script>
   const channelEl = document.querySelector("muix-channel");
@@ -48,7 +58,10 @@ export default function WcPage() {
   channelEl.addEventListener("muix:channel", (e) => {
     console.log(e.detail.channel);
   });
-</script>`}</pre>
+</script>`}
+        language="html"
+        title="muix-channel.html"
+      />
 
       <h2>Attributes</h2>
       <table>

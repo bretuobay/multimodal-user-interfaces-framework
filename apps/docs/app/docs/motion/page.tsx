@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { CodeBlock } from "@repo/ui";
 
 export const metadata: Metadata = { title: "@muix/motion" };
 
-export default function MotionPage() {
+export default async function MotionPage() {
   return (
     <>
       <h1>@muix/motion</h1>
-      <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>
+      <p className="docs-lede">
         Pointer events, device orientation, and gesture recognition (tap, swipe, pinch).
       </p>
 
@@ -23,7 +24,8 @@ export default function MotionPage() {
 
       <h2>PointerSource</h2>
       <p>Listens to Pointer Events on a DOM target and emits them into a channel.</p>
-      <pre>{`import { createMotionChannel, PointerSource } from "@muix/motion";
+      <CodeBlock
+        code={`import { createMotionChannel, PointerSource } from "@muix/motion";
 
 const channel = createMotionChannel();
 const pointer = new PointerSource();
@@ -40,14 +42,21 @@ channel.observe().subscribe({
   },
 });
 
-pointer.detach();`}</pre>
+pointer.detach();`}
+        language="ts"
+        title="pointer-source.ts"
+      />
 
       <h2>DeviceOrientationSource</h2>
-      <pre>{`import { DeviceOrientationSource } from "@muix/motion";
+      <CodeBlock
+        code={`import { DeviceOrientationSource } from "@muix/motion";
 
 const orientation = new DeviceOrientationSource();
 orientation.attach(channel);   // listens to window deviceorientation
-orientation.detach();`}</pre>
+orientation.detach();`}
+        language="ts"
+        title="device-orientation-source.ts"
+      />
 
       <h2>GestureRecognizer</h2>
       <p>
@@ -56,7 +65,8 @@ orientation.detach();`}</pre>
         <code>Channel.pipe()</code> to layer it on top of a{" "}
         <code>MotionChannel</code>.
       </p>
-      <pre>{`import { createGestureRecognizer } from "@muix/motion";
+      <CodeBlock
+        code={`import { createGestureRecognizer } from "@muix/motion";
 
 const recognizer = createGestureRecognizer({
   tapMaxDurationMs: 200,    // max ms for a tap
@@ -76,7 +86,10 @@ enriched.observe().subscribe({
       }
     }
   },
-});`}</pre>
+});`}
+        language="ts"
+        title="gesture-recognizer.ts"
+      />
     </>
   );
 }

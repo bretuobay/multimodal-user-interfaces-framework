@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { CodeBlock } from "@repo/ui";
 
 export const metadata: Metadata = { title: "@muix/react" };
 
-export default function ReactPage() {
+export default async function ReactPage() {
   return (
     <>
       <h1>@muix/react</h1>
-      <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>
+      <p className="docs-lede">
         React hooks and context for all MUIX primitives.
       </p>
 
@@ -15,7 +16,8 @@ export default function ReactPage() {
         Creates a <code>Session</code>, starts it on mount, terminates it on
         unmount. All hooks below must be called inside a provider.
       </p>
-      <pre>{`import { SessionProvider } from "@muix/react";
+      <CodeBlock
+        code={`import { SessionProvider } from "@muix/react";
 
 export default function App() {
   return (
@@ -26,22 +28,34 @@ export default function App() {
 }
 
 // Provide an existing session instead:
-<SessionProvider session={mySession}>...</SessionProvider>`}</pre>
+<SessionProvider session={mySession}>...</SessionProvider>`}
+        language="tsx"
+        title="session-provider.tsx"
+      />
 
       <h2>useSession</h2>
-      <pre>{`const session = useSession(); // throws if outside SessionProvider`}</pre>
+      <CodeBlock
+        code={`const session = useSession(); // throws if outside SessionProvider`}
+        language="ts"
+        title="use-session.ts"
+      />
 
       <h2>useSignal</h2>
       <p>Subscribe to any <code>ReadonlySignal</code> and re-render on change.</p>
-      <pre>{`import { useSignal } from "@muix/react";
+      <CodeBlock
+        code={`import { useSignal } from "@muix/react";
 
 function StatusBadge({ channel }) {
   const status = useSignal(channel.status);  // "idle" | "open" | "paused" ...
   return <span>{status}</span>;
-}`}</pre>
+}`}
+        language="tsx"
+        title="use-signal.tsx"
+      />
 
       <h2>useChannel</h2>
-      <pre>{`import { useChannel } from "@muix/react";
+      <CodeBlock
+        code={`import { useChannel } from "@muix/react";
 import { createChannel } from "@muix/core";
 
 function MyComponent() {
@@ -51,10 +65,14 @@ function MyComponent() {
     session,
   );
   // channel is stable across re-renders
-}`}</pre>
+}`}
+        language="tsx"
+        title="use-channel.tsx"
+      />
 
       <h2>useAction</h2>
-      <pre>{`import { useAction } from "@muix/react";
+      <CodeBlock
+        code={`import { useAction } from "@muix/react";
 
 const definition = {
   id: "summarise",
@@ -75,10 +93,14 @@ function SummariseButton() {
       {result && <p>{result}</p>}
     </>
   );
-}`}</pre>
+}`}
+        language="tsx"
+        title="use-action.tsx"
+      />
 
       <h2>useAgent</h2>
-      <pre>{`import { useAgent } from "@muix/react";
+      <CodeBlock
+        code={`import { useAgent } from "@muix/react";
 import { createAgentChannel } from "@muix/agent";
 
 const agentChannel = createAgentChannel({ endpoint: "/api/chat" });
@@ -95,7 +117,10 @@ function Chat() {
   } = useAgent({ channel: agentChannel, session });
 
   return (/* ... */);
-}`}</pre>
+}`}
+        language="tsx"
+        title="use-agent.tsx"
+      />
       <table>
         <thead><tr><th>Return value</th><th>Type</th><th>Description</th></tr></thead>
         <tbody>

@@ -1,18 +1,20 @@
 import type { Metadata } from "next";
+import { CodeBlock } from "@repo/ui";
 
 export const metadata: Metadata = { title: "@muix/solid" };
 
-export default function SolidPage() {
+export default async function SolidPage() {
   return (
     <>
       <h1>@muix/solid</h1>
-      <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>
+      <p className="docs-lede">
         Solid.js primitives — wraps MUIX signals as Solid accessors using{" "}
         <code>createSignal</code> and <code>onCleanup</code>.
       </p>
 
       <h2>Session context</h2>
-      <pre>{`// root component
+      <CodeBlock
+        code={`// root component
 import { createSessionProvider, SessionContext } from "@muix/solid";
 
 function App() {
@@ -29,7 +31,10 @@ function App() {
 import { useSession } from "@muix/solid";
 function Chat() {
   const session = useSession();
-}`}</pre>
+}`}
+        language="tsx"
+        title="session-context.tsx"
+      />
 
       <h2>useSignal</h2>
       <p>
@@ -37,30 +42,46 @@ function Chat() {
         MUIX <code>ReadonlySignal</code>. Subscription is cleaned up via{" "}
         <code>onCleanup</code>.
       </p>
-      <pre>{`import { useSignal } from "@muix/solid";
+      <CodeBlock
+        code={`import { useSignal } from "@muix/solid";
 
 function StatusBadge(props: { channel: Channel<unknown> }) {
   const status = useSignal(props.channel.status);
   return <span>{status()}</span>;
-}`}</pre>
+}`}
+        language="tsx"
+        title="use-signal.tsx"
+      />
 
       <h2>useChannel</h2>
-      <pre>{`const { channel, status, error } = useChannel(
+      <CodeBlock
+        code={`const { channel, status, error } = useChannel(
   (s) => s.addChannel("my-channel"),
   session,
 );
-// status and error are Solid accessors: () => ChannelStatus`}</pre>
+// status and error are Solid accessors: () => ChannelStatus`}
+        language="ts"
+        title="use-channel.ts"
+      />
 
       <h2>useAction</h2>
-      <pre>{`const { dispatch, status, result, cancel } = useAction(definition, session);
+      <CodeBlock
+        code={`const { dispatch, status, result, cancel } = useAction(definition, session);
 
-// status() === "running" etc.`}</pre>
+// status() === "running" etc.`}
+        language="ts"
+        title="use-action.ts"
+      />
 
       <h2>useAgent</h2>
-      <pre>{`const { send, history, streamingText, isStreaming, cancel, clear } =
+      <CodeBlock
+        code={`const { send, history, streamingText, isStreaming, cancel, clear } =
   useAgent({ channel: agentChannel });
 
-// history(), streamingText(), isStreaming() are all reactive accessors`}</pre>
+// history(), streamingText(), isStreaming() are all reactive accessors`}
+        language="ts"
+        title="use-agent.ts"
+      />
     </>
   );
 }

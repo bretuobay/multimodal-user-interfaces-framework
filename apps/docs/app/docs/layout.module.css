@@ -1,0 +1,149 @@
+.shell {
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 1.25rem 1rem 1.5rem;
+  border-right: 1px solid var(--border);
+  background: var(--sidebar-bg);
+}
+
+.brand {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--fg);
+}
+
+.brandMark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.brandDot {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 0.35rem rgba(0, 191, 255, 0.1);
+}
+
+.brandCopy {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.navGroup {
+  margin-top: 1rem;
+  padding: 0 0.25rem;
+}
+
+.navLabel {
+  padding: 0 0.75rem;
+  margin-bottom: 0.45rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.navLink {
+  display: block;
+  padding: 0.62rem 0.75rem;
+  border-radius: 14px;
+  color: var(--fg);
+  font-size: 0.92rem;
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.navLink:hover {
+  background: rgba(0, 191, 255, 0.08);
+  color: var(--accent-strong);
+  text-decoration: none;
+  transform: translateX(1px);
+}
+
+.contentWrap {
+  min-width: 0;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem 2rem 0;
+}
+
+.topbarKicker {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.topbarLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--fg);
+  font-weight: 700;
+}
+
+.main {
+  max-width: 960px;
+  padding: 1.5rem 2rem 3rem;
+}
+
+.article {
+  padding: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 32px;
+  background: var(--panel);
+  box-shadow: none;
+}
+
+@media (max-width: 1024px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+@media (max-width: 720px) {
+  .topbar,
+  .main {
+    padding-inline: 1rem;
+  }
+
+  .article {
+    padding: 1.2rem;
+    border-radius: 24px;
+  }
+}
